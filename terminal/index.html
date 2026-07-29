@@ -306,6 +306,10 @@ src/pay.py
   <p class="catdesc">Twenty years of terminal escape attacks, by class. Each is a way
     program output tricks the terminal into acting; secure-terminal answers them the same
     way, by construction -- with one scoped exception, noted in the cursor-spoof row.
+    Most rows are answered by ABSENCE -- the class needs a parser or feature secure-terminal does not
+    implement, so it is not applicable rather than defended. Worth stating plainly: that is not a claim of
+    being defect-free. A long list of known CVEs in other terminals is largely inapplicable here, and says
+    nothing about undiscovered bugs in secure-terminal's own (much smaller) surface.
     Live, canary-forked proofs for every class are in the
     <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>.</p>
   <article class="issue">
