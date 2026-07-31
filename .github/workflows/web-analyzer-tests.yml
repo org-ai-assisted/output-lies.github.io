@@ -71,6 +71,7 @@ jobs:
           repository: org-ai-assisted/helper-scripts
           ref: master
           path: helper-scripts
+          persist-credentials: false
 
       - name: Provide helper-scripts runtime at the system path
         ## web-analyzer-tests sources has.sh through the absolute
