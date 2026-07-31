@@ -53,12 +53,17 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           path: output-lies
+          ## The next step executes dist-ai's code in this workspace. Checkout
+          ## otherwise leaves this repo's GITHUB_TOKEN in .git/config, where
+          ## that foreign code can read it. Nothing here pushes.
+          persist-credentials: false
 
       - name: Check out dist-ai (test suite)
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
         with:
           repository: org-ai-assisted/dist-ai
           path: dist-ai
+          persist-credentials: false
 
       - name: Check out helper-scripts (sourced by the suite entrypoint)
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
