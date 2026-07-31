@@ -1,7 +1,7 @@
 # AI-Assisted.
 # Runs the dist-ai web-analyzer test suite against this repo's analyze/analyzer.js.
 # The suite lives in org-ai-assisted/dist-ai (too high-volume for human review);
-# here we only check out both repos as siblings and point OUTPUT_LIES_REPO at this
+# here we only check out the repos as siblings and point OUTPUT_LIES_REPO at this
 # checkout. debian:trixie-slim matches the dist-ai CI runtime.
 name: web-analyzer-tests
 
@@ -59,6 +59,23 @@ jobs:
         with:
           repository: org-ai-assisted/dist-ai
           path: dist-ai
+
+      - name: Check out helper-scripts (sourced by the suite entrypoint)
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          repository: org-ai-assisted/helper-scripts
+          ref: master
+          path: helper-scripts
+
+      - name: Provide helper-scripts runtime at the system path
+        ## web-analyzer-tests sources has.sh through the absolute
+        ## /usr/libexec/helper-scripts path, which no debian:trixie-slim image
+        ## carries. This is the same committed dist-ai/ci script that
+        ## reusable-dist-ai-tests.yml runs for a consumer declaring
+        ## 'dist-ai-tests.helper-scripts: true'; the lane is bespoke because
+        ## analyzer.js is not a derivative-maker component, so the dependency is
+        ## declared here rather than in .github/dm-consumer.yml.
+        run: dist-ai/ci/dist-ai-tests-ci-hs-runtime.sh "${GITHUB_WORKSPACE}/helper-scripts"
 
       - name: Run web-analyzer-tests
         run: OUTPUT_LIES_REPO="${GITHUB_WORKSPACE}/output-lies" bash dist-ai/usr/bin/web-analyzer-tests
