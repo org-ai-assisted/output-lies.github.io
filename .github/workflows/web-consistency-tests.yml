@@ -11,6 +11,12 @@ name: web-consistency-tests
 on:
   # Push testing + the gated deploy are in pages.yml; this covers PRs.
   pull_request:
+    ## CI runs only where we enabled it. Unset variable -> the job is
+    ## skipped, no runner is allocated, and the run stays green: upstream
+    ## and forks are never handed a red X for a lane they did not opt into.
+    ## A fork that WANTS our CI sets the same variable in its own repo.
+    if: vars.CI_ENABLED_ORG_AI_ASSISTED == 'true'
+    timeout-minutes: 15
     paths:
       - '**/*.html'
       - 'style.css'
@@ -19,8 +25,19 @@ on:
 permissions:
   contents: read
 
+## One run per ref; a superseded push has nothing to say.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   web-consistency-tests:
+    ## CI runs only where we enabled it. Unset variable -> the job is
+    ## skipped, no runner is allocated, and the run stays green: upstream
+    ## and forks are never handed a red X for a lane they did not opt into.
+    ## A fork that WANTS our CI sets the same variable in its own repo.
+    if: vars.CI_ENABLED_ORG_AI_ASSISTED == 'true'
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     container: debian:trixie-slim
     steps:
