@@ -1,0 +1,75 @@
+# AI-Assisted.
+# Mandatory mobile-overflow gate: load every page in headless chromium at a
+# phone viewport and fail if the body scrolls sideways. The check
+# (check_mobile.py) lives in org-ai-assisted/dist-ai; website-tests treats a
+# missing browser as a clean SKIP (correct on a dev box), so a dedicated lane is
+# needed to REQUIRE the browser here -- dist-ai/ci/website-mobile-check.sh
+# installs Playwright + chromium and turns a 77 SKIP into a hard failure.
+name: website-mobile
+
+on:
+  # Pages serves this branch directly, so a push IS a deploy: check on push, not
+  # only on PRs (the site is not developed through PRs).
+  push:
+    branches: [master]
+    paths:
+      - '**/*.html'
+      - 'style.css'
+      - '.github/workflows/website-mobile.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - '**/*.html'
+      - 'style.css'
+      - '.github/workflows/website-mobile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One run per ref; a superseded push has nothing to say.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  website-mobile:
+    # CI runs only where we enabled it. Unset variable -> the job is skipped, no
+    # runner is allocated, and the run stays green: upstream and forks are never
+    # handed a red X for a lane they did not opt into. A fork that WANTS our CI
+    # sets the same variable in its own repo.
+    if: vars.CI_ENABLED_ORG_AI_ASSISTED == 'true'
+    timeout-minutes: 20
+    # ubuntu, not the trixie-slim container the static lane uses: Playwright
+    # 'install --with-deps chromium' pulls the browser's OS packages, which is
+    # simplest on the GitHub-hosted image.
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out output-lies.github.io
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          path: output-lies
+          # The next step executes dist-ai's code in this workspace. Checkout
+          # otherwise leaves this repo's GITHUB_TOKEN in .git/config, where that
+          # foreign code could read it. Nothing here pushes.
+          persist-credentials: false
+
+      - name: Check out dist-ai (mobile guard + check_mobile.py)
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          repository: org-ai-assisted/dist-ai
+          path: dist-ai
+          persist-credentials: false
+
+      - name: Mobile-overflow guard (mandatory)
+        run: ./dist-ai/ci/website-mobile-check.sh "${GITHUB_WORKSPACE}/output-lies"
+
+      - name: Emit step summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          ./dist-ai/usr/bin/step-summary-emit \
+            --tool 'website-mobile' \
+            --column-header field \
+            --row "outcome=${JOB_STATUS}"
