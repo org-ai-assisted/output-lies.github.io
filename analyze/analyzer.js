@@ -7,6 +7,13 @@
   that are not plain printable ASCII and names the class of deception each
   belongs to. It deliberately does NOT try to judge intent, and it cannot catch
   all-ASCII homoglyphs (rn vs m) -- those need a human reading char by char.
+
+  Homoglyphs are named by the ASCII character they imitate ("looks like 'a'"),
+  resolved by an exact algorithmic map for fullwidth forms and the mathematical
+  alphanumeric symbols, plus a curated table of the well-known cross-script
+  confusables (Cyrillic / Greek / Armenian). A non-ASCII letter that is NOT a
+  known look-alike is still surfaced, but labelled by its script rather than
+  mislabelled a homoglyph.
 */
 ;(function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -16,10 +23,98 @@
 
   function inRange(cp, a, b) { return cp >= a && cp <= b; }
 
+  // --- confusable resolution: the ASCII char a codepoint imitates, or null ----
+
+  // Mathematical Alphanumeric Symbols (U+1D400..U+1D7FF): 13 styled A-Z/a-z
+  // blocks of 52, then 5 styled 0-9 blocks of 10. Reserved holes inside a block
+  // are unassigned (the styled glyph lives in the Letterlike Symbols block and is
+  // handled by CONFUSABLES below), so real input never lands on a hole and plain
+  // block arithmetic is exact.
+  var MATH_LETTER_BLOCKS = [
+    0x1D400, 0x1D434, 0x1D468, 0x1D49C, 0x1D4D0, 0x1D504, 0x1D538,
+    0x1D56C, 0x1D5A0, 0x1D5D4, 0x1D608, 0x1D63C, 0x1D670
+  ];
+  var MATH_DIGIT_BLOCKS = [0x1D7CE, 0x1D7D8, 0x1D7E2, 0x1D7EC, 0x1D7F6];
+
+  function mathAlnum(cp) {
+    var i, s;
+    for (i = 0; i < MATH_LETTER_BLOCKS.length; i++) {
+      s = MATH_LETTER_BLOCKS[i];
+      if (cp >= s && cp < s + 52) {
+        var d = cp - s;
+        return d < 26 ? String.fromCharCode(65 + d) : String.fromCharCode(97 + d - 26);
+      }
+    }
+    for (i = 0; i < MATH_DIGIT_BLOCKS.length; i++) {
+      s = MATH_DIGIT_BLOCKS[i];
+      if (cp >= s && cp < s + 10) return String.fromCharCode(48 + (cp - s));
+    }
+    return null;
+  }
+
+  // Curated cross-script look-alikes -> ASCII. The well-established IDN-homograph
+  // set: Cyrillic and Greek are textbook-safe; Armenian is the high-confidence
+  // subset; the styled Letterlike Symbols fill the Math-block holes above.
+  var CONFUSABLES = {
+    // Cyrillic lowercase
+    0x0430: 'a', 0x0435: 'e', 0x043E: 'o', 0x0440: 'p', 0x0441: 'c',
+    0x0443: 'y', 0x0445: 'x', 0x0456: 'i', 0x0458: 'j', 0x0455: 's',
+    0x04CF: 'l', 0x0501: 'd', 0x051B: 'q', 0x051D: 'w', 0x04BB: 'h',
+    // Cyrillic uppercase
+    0x0410: 'A', 0x0412: 'B', 0x0415: 'E', 0x041A: 'K', 0x041C: 'M',
+    0x041D: 'H', 0x041E: 'O', 0x0420: 'P', 0x0421: 'C', 0x0422: 'T',
+    0x0423: 'Y', 0x0425: 'X', 0x0405: 'S', 0x0408: 'J', 0x0406: 'I',
+    0x04C0: 'I', 0x051A: 'Q', 0x051C: 'W', 0x0417: '3',
+    // Greek uppercase
+    0x0391: 'A', 0x0392: 'B', 0x0395: 'E', 0x0396: 'Z', 0x0397: 'H',
+    0x0399: 'I', 0x039A: 'K', 0x039C: 'M', 0x039D: 'N', 0x039F: 'O',
+    0x03A1: 'P', 0x03A4: 'T', 0x03A5: 'Y', 0x03A7: 'X',
+    // Greek lowercase (strong look-alikes only)
+    0x03BF: 'o', 0x03B1: 'a', 0x03B3: 'y', 0x03BD: 'v', 0x03C1: 'p', 0x03C7: 'x',
+    // Armenian (high-confidence subset)
+    0x0585: 'o', 0x057D: 'u', 0x0578: 'n', 0x0570: 'h', 0x0566: 'q',
+    // Letterlike Symbols that are the styled glyphs of the Math-block holes
+    0x210E: 'h', 0x212F: 'e', 0x2130: 'E', 0x2131: 'F', 0x210B: 'H',
+    0x2110: 'I', 0x2112: 'L', 0x2133: 'M', 0x211B: 'R', 0x212C: 'B',
+    0x2102: 'C', 0x210D: 'H', 0x2115: 'N', 0x2119: 'P', 0x211A: 'Q',
+    0x211D: 'R', 0x2124: 'Z', 0x2128: 'Z', 0x210C: 'H', 0x2111: 'I',
+    0x211C: 'R', 0x212D: 'C',
+    // misc single-glyph confusables
+    0x01C0: '|', 0x2044: '/', 0x2215: '/', 0x2216: '\\', 0x2223: '|',
+    0x0269: 'i', 0x0131: 'i', 0x0261: 'g'
+  };
+
+  // The ASCII character `cp` imitates, or null. The maths alphabets are exact
+  // arithmetic; the rest is the curated table. (Fullwidth forms map to ASCII too
+  // but are visibly wider, so classify() keeps them in their own `wide` class
+  // with the target attached rather than calling them look-alikes.)
+  function confusableTarget(cp) {
+    var m = mathAlnum(cp);
+    if (m) return m;
+    var c = CONFUSABLES[cp];
+    return c || null;
+  }
+
+  // A coarse script label for a non-ASCII letter that is NOT a known look-alike,
+  // so it is surfaced with context rather than a bare "non-ASCII".
+  function scriptName(cp) {
+    if (inRange(cp, 0x0370, 0x03FF) || inRange(cp, 0x1F00, 0x1FFF)) return 'Greek letter';
+    if (inRange(cp, 0x0400, 0x052F) || inRange(cp, 0x1C80, 0x1C8F) || inRange(cp, 0x2DE0, 0x2DFF)) return 'Cyrillic letter';
+    if (inRange(cp, 0x0530, 0x058F)) return 'Armenian letter';
+    if (inRange(cp, 0x13A0, 0x13FF) || inRange(cp, 0xAB70, 0xABBF)) return 'Cherokee letter';
+    if (inRange(cp, 0x0590, 0x05FF)) return 'Hebrew letter';
+    if (inRange(cp, 0x0600, 0x06FF) || inRange(cp, 0x0750, 0x077F)) return 'Arabic letter';
+    if (inRange(cp, 0x3040, 0x30FF)) return 'Japanese kana';
+    if (inRange(cp, 0x4E00, 0x9FFF) || inRange(cp, 0x3400, 0x4DBF)) return 'CJK ideograph';
+    if (inRange(cp, 0xAC00, 0xD7AF) || inRange(cp, 0x1100, 0x11FF)) return 'Hangul';
+    return null;
+  }
+
   // Returns null for safe text (printable ASCII plus tab/newline/CR), otherwise
-  // { cls, name, visible }. `visible` is true when the character occupies space
-  // on screen (homoglyphs, fullwidth, combining) and false when it is invisible
-  // or masquerades as a space.
+  // { cls, name, visible[, target] }. `visible` is true when the character
+  // occupies space on screen (homoglyphs, fullwidth, combining) and false when
+  // it is invisible or masquerades as a space. `target` is set for homoglyphs:
+  // the ASCII character the codepoint imitates.
   function classify(cp) {
     // ordinary, safe whitespace
     if (cp === 0x09 || cp === 0x0A || cp === 0x0D) return null;
@@ -79,13 +174,23 @@
     if (inRange(cp, 0xE000, 0xF8FF) || inRange(cp, 0xF0000, 0xFFFFD) || inRange(cp, 0x100000, 0x10FFFD))
       return { cls: 'other', name: 'private use', visible: true };
 
-    // homoglyph-prone scripts (coarse: flags the whole script, not confusable pairs)
-    if (inRange(cp, 0x0400, 0x052F)) return { cls: 'homo', name: 'Cyrillic', visible: true };
-    if (inRange(cp, 0x0370, 0x03FF)) return { cls: 'homo', name: 'Greek', visible: true };
-    if (inRange(cp, 0x0530, 0x058F)) return { cls: 'homo', name: 'Armenian', visible: true };
-    if (inRange(cp, 0x13A0, 0x13FF)) return { cls: 'homo', name: 'Cherokee', visible: true };
+    // fullwidth ASCII forms: a distinct, visibly wider glyph -- keep the `wide`
+    // class but name the ASCII character it stands in for
+    if (cp >= 0xFF01 && cp <= 0xFF5E) {
+      var fw = String.fromCharCode(cp - 0xFEE0);
+      return { cls: 'wide', name: "fullwidth '" + fw + "'", visible: true, target: fw };
+    }
 
-    // fullwidth and halfwidth forms
+    // homoglyph: named by the ASCII character it imitates (confusable pair)
+    var target = confusableTarget(cp);
+    if (target !== null)
+      return { cls: 'homo', name: "looks like '" + target + "'", visible: true, target: target };
+
+    // a non-confusable non-ASCII letter: surfaced, labelled by script for context
+    var script = scriptName(cp);
+    if (script) return { cls: 'other', name: script, visible: true };
+
+    // other fullwidth/halfwidth forms (halfwidth kana, width variants)
     if (inRange(cp, 0xFF00, 0xFFEF)) return { cls: 'wide', name: 'fullwidth/halfwidth form', visible: true };
 
     // anything else outside ASCII
@@ -127,5 +232,8 @@
     return out;
   }
 
-  return { classify: classify, analyze: analyze, hex: hex, toAscii: toAscii };
+  return {
+    classify: classify, analyze: analyze, hex: hex, toAscii: toAscii,
+    confusableTarget: confusableTarget
+  };
 }));
