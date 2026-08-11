@@ -342,10 +342,10 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 
 /* freedom-software footer badges (OSI + GNU), open source / AGPL */
 .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;padding:14px 0 2px}
-.freebadge{display:inline-flex;align-items:center;gap:9px;color:var(--muted);text-decoration:none;font-size:.85rem}
-.freebadge img{height:32px;width:auto;opacity:.8}
+.freebadge{display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600}
+.freebadge img{height:22px;width:auto;filter:grayscale(1);opacity:.55;transition:filter .12s,opacity .12s}
 .freebadge:hover{color:var(--ink)}
-.freebadge:hover img{opacity:1}
+.freebadge:hover img{filter:grayscale(0);opacity:1}
 @media(max-width:640px){
   .ffree{flex-direction:column;align-items:flex-start;gap:11px;padding-bottom:10px}
 }
