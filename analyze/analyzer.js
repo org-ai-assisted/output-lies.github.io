@@ -36,8 +36,21 @@
   ];
   var MATH_DIGIT_BLOCKS = [0x1D7CE, 0x1D7D8, 0x1D7E2, 0x1D7EC, 0x1D7F6];
 
+  // Reserved (unassigned) positions inside the letter blocks: the styled glyph
+  // lives in the Letterlike Symbols block instead (see CONFUSABLES). Excluded
+  // from the arithmetic so a pasted unassigned scalar is never reported as a
+  // false look-alike -- it has no glyph resembling any ASCII letter.
+  var MATH_RESERVED = {
+    0x1D455: 1,
+    0x1D49D: 1, 0x1D49E: 1, 0x1D49F: 1, 0x1D4A5: 1, 0x1D4A6: 1, 0x1D4A9: 1, 0x1D4AA: 1, 0x1D4AB: 1,
+    0x1D4BA: 1, 0x1D4BC: 1, 0x1D4C4: 1,
+    0x1D506: 1, 0x1D50B: 1, 0x1D50C: 1, 0x1D515: 1, 0x1D51D: 1,
+    0x1D53A: 1, 0x1D53F: 1, 0x1D545: 1, 0x1D547: 1, 0x1D548: 1, 0x1D549: 1, 0x1D551: 1
+  };
+
   function mathAlnum(cp) {
     var i, s;
+    if (MATH_RESERVED[cp]) return null;
     for (i = 0; i < MATH_LETTER_BLOCKS.length; i++) {
       s = MATH_LETTER_BLOCKS[i];
       if (cp >= s && cp < s + 52) {
@@ -72,10 +85,10 @@
     // Greek lowercase (strong look-alikes only)
     0x03BF: 'o', 0x03B1: 'a', 0x03B3: 'y', 0x03BD: 'v', 0x03C1: 'p', 0x03C7: 'x',
     // Armenian (high-confidence subset)
-    0x0585: 'o', 0x057D: 'u', 0x0578: 'n', 0x0570: 'h', 0x0566: 'q',
+    0x0585: 'o', 0x057D: 'u', 0x0578: 'n', 0x0570: 'h',
     // Letterlike Symbols that are the styled glyphs of the Math-block holes
-    0x210E: 'h', 0x212F: 'e', 0x2130: 'E', 0x2131: 'F', 0x210B: 'H',
-    0x2110: 'I', 0x2112: 'L', 0x2133: 'M', 0x211B: 'R', 0x212C: 'B',
+    0x210E: 'h', 0x212F: 'e', 0x210A: 'g', 0x2134: 'o', 0x2130: 'E', 0x2131: 'F',
+    0x210B: 'H', 0x2110: 'I', 0x2112: 'L', 0x2133: 'M', 0x211B: 'R', 0x212C: 'B',
     0x2102: 'C', 0x210D: 'H', 0x2115: 'N', 0x2119: 'P', 0x211A: 'Q',
     0x211D: 'R', 0x2124: 'Z', 0x2128: 'Z', 0x210C: 'H', 0x2111: 'I',
     0x211C: 'R', 0x212D: 'C',

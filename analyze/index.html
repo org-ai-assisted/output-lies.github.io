@@ -144,10 +144,12 @@
   </div>
 
   <div class="limits" style="margin-top:22px">
-    <h4>Illustrative aid, not the authority</h4>
-    <p>This is a teaching demo written in JavaScript. It flags codepoint classes; it does not decide intent, and
-    its homoglyph heuristic is coarse (it flags whole non-ASCII scripts, not confusable pairs). For real work use
-    <a href="https://www.kicksecure.com/wiki/Unicode-show"><code>unicode-show</code></a>, which is what this page imitates.</p>
+    <h4>A browser aid, not the last word</h4>
+    <p>This teaching demo runs entirely in your browser. It names hidden control, bidi, zero-width and deceptive-space
+    characters, and resolves homoglyphs to the ASCII character they imitate -- Cyrillic, Greek and Armenian look-alikes,
+    fullwidth forms, and the mathematical alphabets, exact code point by code point. It still cannot judge intent, cannot
+    catch all-ASCII look-alikes (<code>rn</code> vs <code>m</code>), and does not do word-level mixed-script analysis. For
+    authoritative work use <a href="https://www.kicksecure.com/wiki/Unicode-show"><code>unicode-show</code></a>.</p>
   </div>
 </div></section>
 
