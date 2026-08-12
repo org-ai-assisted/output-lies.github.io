@@ -72,6 +72,20 @@
   .btrow label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
   .btrow button{margin-left:auto;font:600 .9rem var(--sans);padding:9px 18px;border-radius:9px;
     border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+  /* safe-paste sandbox: grouped card, clear empty state, target ring like .issue */
+  .sbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .sbox textarea{width:100%;min-height:96px;resize:vertical;box-sizing:border-box;
+    font:1rem/1.5 var(--mono);color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+  .sbox textarea:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+  .sbox .panes{margin-top:14px}
+  .sb-hint{margin:12px 2px 0;color:var(--muted);font-size:.9rem;line-height:1.5}
+  .sb-hint b{color:var(--ink);font-weight:600}
+  #sandbox:target .sbox{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}
+  /* per-cell citation links in the tools table */
+  .tbl td a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  .tbl td a:hover{border-bottom-color:var(--accent)}
+  .tbl .src{margin-left:5px;font-size:.8em;color:var(--muted);white-space:nowrap}
 </style>
 
 <header class="nav">
@@ -110,7 +124,7 @@
 </div></section>
 
 <section class="cat" id="tool"><div class="wrap">
-  <h2 class="catname">The x-ray</h2>
+  <h2 class="catname"><a class="h-anchor" href="#tool">The x-ray</a></h2>
   <p class="catdesc">Paste below, or load a trap. Flagged codepoints are chipped inline.</p>
 
   <div class="abox">
@@ -154,7 +168,7 @@
 </div></section>
 
 <section class="cat" id="build"><div class="wrap">
-  <h2 class="catname">Build a trap</h2>
+  <h2 class="catname"><a class="h-anchor" href="#build">Build a trap</a></h2>
   <p class="catdesc">See how little effort it takes. Type something honest, pick a disguise, and watch it become a
     lie the eye cannot catch. Everything here is benign and stays in your browser.</p>
   <div class="abox">
@@ -182,22 +196,35 @@
 </div></section>
 
 <section class="cat" id="sandbox"><div class="wrap">
-  <h2 class="catname">Safe-paste sandbox</h2>
+  <h2 class="catname"><a class="h-anchor" href="#sandbox">Safe-paste sandbox</a></h2>
   <p class="catdesc">A preview of <a href="https://secure-terminal.github.io"><b>secure-terminal</b></a>: a
     place where paste is safe by construction. Paste anything below. The left is what arrives; the right is what a
     terminal that accepts only printable ASCII would keep.</p>
-  <textarea id="sb-in" spellcheck="false" placeholder="Paste a command here..."></textarea>
-  <div class="panes" style="margin-top:14px">
-    <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you pasted</div>
-      <div class="xray" id="sb-raw" style="border-radius:0;border:0;min-height:96px"></div></div>
-    <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what a safe terminal keeps</div>
-      <pre class="term" id="sb-safe" style="min-height:96px"></pre></div>
+  <div class="sbox">
+    <textarea id="sb-in" spellcheck="false" placeholder="Paste or type a command here to compare the two views..."></textarea>
+    <p class="sb-hint" id="sb-hint">Nothing pasted yet. Type or paste above and the two views appear side by side:
+      <b>what you pasted</b> (every byte, with hidden codepoints chipped) next to <b>what a safe terminal keeps</b>
+      (printable ASCII only).</p>
+    <div class="sb-live" id="sb-live" hidden>
+      <div class="panes">
+        <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you pasted</div>
+          <div class="xray" id="sb-raw" style="border-radius:0;border:0;min-height:96px"></div></div>
+        <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what a safe terminal keeps</div>
+          <pre class="term" id="sb-safe" style="min-height:96px"></pre></div>
+      </div>
+      <p class="tallies" id="sb-tallies"></p>
+      <div class="axtra">
+        <button id="sb-copy-in" type="button">Copy what you pasted</button>
+        <button id="sb-copy-safe" type="button">Copy the kept text</button>
+        <button id="sb-send" type="button">Send to the x-ray</button>
+        <span class="cmsg" id="sb-msg" aria-live="polite"></span>
+      </div>
+    </div>
   </div>
-  <p class="tallies" id="sb-tallies"></p>
 </div></section>
 
 <section class="cat" id="test"><div class="wrap">
-  <h2 class="catname">Test your own tool</h2>
+  <h2 class="catname"><a class="h-anchor" href="#test">Test your own tool</a></h2>
   <p class="catdesc">The interesting question is not this page. It is whether the tools you already trust warn you.</p>
   <div class="issue">
     <p>Load a trap above, copy it, and paste it into the things you make security decisions in. A safe tool either
@@ -219,18 +246,35 @@
   <table class="tbl">
     <thead><tr><th>Tool (defaults, 2026)</th><th>Bidi override</th><th>Zero-width</th><th>Homoglyph</th></tr></thead>
     <tbody>
-      <tr><td>VS Code</td><td>warns</td><td>warns</td><td>warns</td></tr>
-      <tr><td>GitHub / GitLab web diff</td><td>warns (banner)</td><td>renders silently</td><td>renders silently</td></tr>
-      <tr><td>Plain terminal (xterm, gnome-terminal)</td><td>applies the override</td><td>invisible</td><td>renders</td></tr>
-      <tr><td>Editor without a Unicode lint</td><td>renders</td><td>invisible</td><td>renders</td></tr>
-      <tr><td><code>unicode-show</code> / <code>stcat</code></td><td>detects / neutralizes</td><td>detects / neutralizes</td><td>detects / restricts</td></tr>
+      <tr><td>VS Code</td>
+        <td>warns <span class="src"><a href="https://code.visualstudio.com/updates/v1_63">docs</a></span></td>
+        <td>warns <span class="src"><a href="https://code.visualstudio.com/updates/v1_63">docs</a></span></td>
+        <td>warns <span class="src"><a href="https://code.visualstudio.com/updates/v1_63">docs</a></span></td></tr>
+      <tr><td>GitHub / GitLab web diff</td>
+        <td>warns (banner) <span class="src"><a href="https://github.blog/changelog/2021-10-31-warning-about-bidirectional-unicode-text/">GitHub</a>, <a href="https://gitlab.com/gitlab-org/gitlab/-/issues/344610">GitLab</a></span></td>
+        <td>renders silently <span class="src"><a href="https://semanticdiff.com/blog/pull-request-unicode-tricks/">tested</a></span></td>
+        <td>renders silently <span class="src"><a href="https://semanticdiff.com/blog/pull-request-unicode-tricks/">tested</a></span></td></tr>
+      <tr><td>Plain terminal (xterm, gnome-terminal)</td>
+        <td>gnome-terminal reorders; xterm does not <span class="src"><a href="https://gnome.pages.gitlab.gnome.org/vte/gtk4/property.Terminal.enable-bidi.html">VTE</a>, <a href="https://terminal-wg.pages.freedesktop.org/bidi/implementations.html">survey</a></span></td>
+        <td>invisible <span class="src"><a href="https://www.unicode.org/charts/PDF/U2000.pdf">U+200B</a></span></td>
+        <td>renders <span class="src"><a href="https://www.unicode.org/reports/tr39/">UTS #39</a></span></td></tr>
+      <tr><td>Editor without a Unicode lint</td>
+        <td>renders <span class="src"><a href="https://trojansource.codes/">Trojan Source</a></span></td>
+        <td>invisible <span class="src"><a href="https://trojansource.codes/">Trojan Source</a></span></td>
+        <td>renders <span class="src"><a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42694">CVE-2021-42694</a></span></td></tr>
+      <tr><td><code>unicode-show</code> / <code>stcat</code></td>
+        <td>detects / neutralizes <span class="src"><a href="https://www.kicksecure.com/wiki/Unicode-show">docs</a></span></td>
+        <td>detects / neutralizes <span class="src"><a href="https://www.kicksecure.com/wiki/Unicode-show">docs</a></span></td>
+        <td>detects / restricts <span class="src"><a href="https://www.kicksecure.com/wiki/Unicode">docs</a></span></td></tr>
     </tbody>
   </table>
   </div>
   <p class="toolnote">Defaults as of 2026-07; behaviour varies by version and configuration, which is exactly why
     the list above says <b>test your own</b>. VS Code has flagged invisible and confusable characters by default
     since its 1.63 "unicode highlighting"; GitHub and GitLab added bidi warning banners after
-    <a href="https://trojansource.codes/">Trojan Source</a>. The row that never lies to you is the last one.</p>
+    <a href="https://trojansource.codes/">Trojan Source</a>, but those banners cover bidirectional controls only --
+    zero-width and confusable characters were still unflagged in the most recent public testing. The row that never
+    lies to you is the last one.</p>
 </div></section>
 
 <section class="cat faq" id="faq"><div class="wrap">
@@ -504,19 +548,38 @@
 
     // ---- safe-paste sandbox (secure-terminal preview) ------------------------
     var sbIn = document.getElementById('sb-in'), sbRaw = document.getElementById('sb-raw'),
-        sbSafe = document.getElementById('sb-safe'), sbT = document.getElementById('sb-tallies');
+        sbSafe = document.getElementById('sb-safe'), sbT = document.getElementById('sb-tallies'),
+        sbHint = document.getElementById('sb-hint'), sbLive = document.getElementById('sb-live'),
+        sbMsg = document.getElementById('sb-msg');
     function sbRun() {
       var str = sbIn.value;
+      if (!str) { sbLive.hidden = true; sbHint.hidden = false; sbT.textContent = ''; return; }
+      sbHint.hidden = true; sbLive.hidden = false;
       renderInto(sbRaw, str);
       var safe = OL.toAscii(str);
       sbSafe.textContent = safe;
-      if (!str) { sbT.textContent = ''; return; }
       var stripped = Array.from(str).length - Array.from(safe).length;
       sbT.textContent = stripped
         ? stripped + ' unsafe codepoint' + (stripped === 1 ? '' : 's') + ' would be refused.'
         : 'All printable ASCII; a safe terminal accepts it unchanged.';
     }
     sbIn.addEventListener('input', sbRun);
+    function sbFlash(m) { sbMsg.textContent = m; setTimeout(function () { sbMsg.textContent = ''; }, 2000); }
+    function sbCopy(text, okmsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { sbFlash(okmsg); }, function () { sbFlash('clipboard blocked'); });
+      } else { sbFlash('clipboard unavailable'); }
+    }
+    document.getElementById('sb-copy-in').addEventListener('click', function () {
+      if (sbIn.value) sbCopy(sbIn.value, 'copied what you pasted');
+    });
+    document.getElementById('sb-copy-safe').addEventListener('click', function () {
+      if (sbIn.value) sbCopy(OL.toAscii(sbIn.value), 'copied the kept ASCII-only text');
+    });
+    document.getElementById('sb-send').addEventListener('click', function () {
+      var x = document.getElementById('in');
+      if (x && sbIn.value) { x.value = sbIn.value; x.dispatchEvent(new Event('input')); location.hash = '#tool'; }
+    });
     sbRun();
   })();
 </script>
