@@ -47,6 +47,9 @@
     <a href="#scan">Scan</a>
     <a href="#stcat">Neutralize</a>
     <a href="#sanitize">Sanitize</a>
+    <a href="#board">Combined board</a>
+    <a href="#osc8">Hyperlink</a>
+    <a href="#altscreen">Alt-screen</a>
     <a href="#classes">Attack classes</a>
     <a href="#record">Proof of concept</a>
     <a href="#faq">FAQ</a>
@@ -293,6 +296,234 @@ src/pay.py
         alt="A terminal showing sanitize-string. An untrusted value with an embedded escape prints as red DROP TABLE users when echoed raw; after sanitize-string the escape is inert (shown as _[31m...) and no longer recolors. sanitize-string on a script tag returns plain alert(1) with tags stripped, and sanitize-string 12 caps a long value to leak: secret.">
       <figcaption>The real tool: an escape in an untrusted value recolors a raw log line (red), but the sanitized value is inert; HTML markup is stripped and the length is capped.</figcaption>
     </figure>
+  </article>
+</div></section>
+
+<!-- ============ combined board (Case D) ============ -->
+<script src="/analyze/analyzer.js"></script>
+<section class="cat" id="board"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#board">One file, every trick</a></h2>
+  <p class="catdesc">The cards above isolate one class each. Real hostile output stacks them. Here is one safe,
+    self-labeling board that carries <em>every</em> display class at once -- download it, <code>cat</code> it,
+    and x-ray it right here. It mirrors the
+    <a href="https://secure-terminal.github.io/comparison/#combined">Case D board</a> on the secure-terminal
+    comparison.</p>
+
+  <article class="issue" id="board-card">
+    <span class="tag">download + live x-ray</span>
+    <h3><a class="cardanchor" href="#board">The combined board</a></h3>
+    <p class="lead">A single file that paints a full-screen "what you see vs what is there" table: a hijacked
+      window title, a DEC line-drawing frame, a homoglyph <code>example.com</code>, a bidi
+      <code>report&nbsp;exe.doc</code>, zero-width and invisible bytes, combining marks, fullwidth look-alikes,
+      a control-byte repaint, an SGR-hidden string, an <a href="#osc8">OSC 8</a> link whose text is not its
+      target, and a <a href="#altscreen">?1049h</a> alternate-screen switch -- with honest Greek as the
+      non-attack contrast.</p>
+    <p class="backdoor"><b>Safe to run.</b> It is display-only: it sets the window title and switches to the
+      alternate screen (both undone by <code>reset</code>), and copies, types and runs nothing. Its first bytes
+      are a plaintext warning; it runs on the alternate screen so your scrollback is preserved. The dangerous
+      classes (clipboard, notification, input reflection, RCE) are deliberately NOT in a cat-able file.</p>
+    <p class="toolnote"><a class="dl" href="/demos/terminal-attack-demo-WARNING-display-only-safe.txt" download>Download the board (2.4 KB .txt)</a>
+      -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>:</p>
+    <div class="copybox"><code class="cmd">curl -O https://output-lies.github.io/demos/terminal-attack-demo-WARNING-display-only-safe.txt
+unicode-show terminal-attack-demo-WARNING-display-only-safe.txt   # names every hidden byte</code><button class="copybtn" type="button" hidden>Copy</button></div>
+
+    <div class="panes">
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what cat shows</div><pre class="term"><span class="p">$</span> cat terminal-attack-demo...txt
+ex&#x430;mple.com
+go&#x3BF;gle.com
+rnicrosoft.com
+report &#x202E;cod.exe&#x202C;
+veri&#x200B;fied
+&#xFEFF;balance
+h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
+&#xFF21;&#xFF22;&#xFF23;
+&#x395;&#x3BB;&#x3BB;&#x3B7;&#x3BD;&#x3B9;&#x3BA;&#x3AC;
+<span class="dim"># reads clean: every trick invisible or disguised</span></pre></div>
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term" id="board-xray"><span class="dim"># each hidden/disguised codepoint, named (the same analyzer the x-ray tool runs):</span>
+<span class="dim">Homoglyph (Cyrillic)  </span>ex<span class="cp">[U+0430]</span>mple.com
+<span class="dim">Homoglyph (Greek)     </span>go<span class="cp">[U+03BF]</span>gle.com
+<span class="dim">ASCII look-alike      </span>rnicrosoft.com  <span class="dim">(pure ASCII -- rn reads as m)</span>
+<span class="dim">Bidi override (RTL)   </span>report <span class="cp">[U+202E]</span>cod.exe<span class="cp">[U+202C]</span>
+<span class="dim">Zero-width space      </span>veri<span class="cp">[U+200B]</span>fied
+<span class="dim">Invisible / BOM       </span><span class="cp">[U+FEFF]</span>balance
+<span class="dim">Combining (Zalgo)     </span>h<span class="cp">[U+0301]</span><span class="cp">[U+0300]</span><span class="cp">[U+0323]</span><span class="cp">[U+0308]</span>e<span class="cp">[U+0301]</span><span class="cp">[U+0300]</span><span class="cp">[U+0323]</span><span class="cp">[U+0308]</span>llo
+<span class="dim">Fullwidth forms       </span><span class="cp">[U+FF21]</span><span class="cp">[U+FF22]</span><span class="cp">[U+FF23]</span>
+<span class="dim">Honest foreign (Greek)</span><span class="cp">[U+0395]</span><span class="cp">[U+03BB]</span><span class="cp">[U+03BB]</span><span class="cp">[U+03B7]</span><span class="cp">[U+03BD]</span><span class="cp">[U+03B9]</span><span class="cp">[U+03BA]</span><span class="cp">[U+03AC]</span>  NOT an attack</pre></div>
+    </div>
+    <p class="catch"><b>The catch:</b> the x-ray on the right is the same <a href="/analyze/">analyzer</a> the
+      x-ray tool runs -- every non-ASCII byte named by codepoint, live in your browser. The escape-sequence
+      classes (title, charset, OSC 8, alt-screen) are not codepoints; see the <a href="#osc8">hyperlink</a> and
+      <a href="#altscreen">alt-screen</a> demos below. Feed the whole file to
+      <a href="https://secure-terminal.github.io/comparison/#combined">secure-terminal</a> and it neutralizes
+      the entire set in one frame.</p>
+    <figure class="shot">
+      <img src="/tui-board-cat.png" width="762" height="518" loading="lazy"
+        alt="A terminal after cat-ing the combined board: a catchy full-screen table renders, the window title bar is hijacked to 'terminal attack-class demo (safe)', and each row shows a live example of an attack class -- example.com, google.com, report exe.doc, verified, balance, hello, ABC, Greek text -- with every trick either invisible or disguised as ordinary text.">
+      <figcaption>What <code>cat</code> shows: the board renders as a catchy full-screen table and the window
+        title is hijacked -- every trick hidden or disguised. The x-ray beside it, and the safe tools, expose
+        them. (<a href="/tui-board-reveal.png">secure-terminal naming every codepoint</a>.)</figcaption>
+    </figure>
+    <script>
+    /* Live x-ray of the combined board, reusing the shared analyzer (window.OL).
+       Renders via DOM text nodes only (never innerHTML), so nothing can inject
+       markup. If JavaScript is off, the static reveal above stands in. */
+    (function () {
+      if (typeof OL === 'undefined') { return; }
+      var box = document.getElementById('board-xray');
+      if (!box) { return; }
+      var ROWS = [
+        ['Homoglyph (Cyrillic)',  'ex\u0430mple.com'],
+        ['Homoglyph (Greek)',     'go\u03BFgle.com'],
+        ['ASCII look-alike',      'rnicrosoft.com'],
+        ['Bidi override (RTL)',   'report \u202Ecod.exe\u202C'],
+        ['Zero-width space',      'veri\u200Bfied'],
+        ['Invisible / BOM',       '\uFEFFbalance'],
+        ['Combining (Zalgo)',     'h\u0301\u0300\u0323\u0308e\u0301\u0300\u0323\u0308llo'],
+        ['Fullwidth forms',       '\uFF21\uFF22\uFF23'],
+        ['Honest foreign (Greek)','\u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC']
+      ];
+      function pad(s) { while (s.length < 22) { s += ' '; } return s; }
+      function dim(t) { var s = document.createElement('span'); s.className = 'dim'; s.textContent = t; return s; }
+      box.textContent = '';
+      box.appendChild(dim('# each hidden/disguised codepoint, named -- x-rayed live by the analyzer:'));
+      box.appendChild(document.createTextNode('\n'));
+      var total = 0;
+      ROWS.forEach(function (row) {
+        box.appendChild(dim(pad(row[0])));
+        var res = OL.analyze(row[1]);
+        if (res.flagged === 0) {
+          box.appendChild(document.createTextNode(row[1] + '  '));
+          box.appendChild(dim('(pure ASCII -- rn reads as m)'));
+        } else {
+          res.items.forEach(function (it) {
+            if (it.safe !== undefined) { box.appendChild(document.createTextNode(it.safe)); return; }
+            var c = document.createElement('span');
+            c.className = 'cp';
+            c.textContent = '[' + OL.hex(it.cp) + ']';
+            c.title = it.info.name + ' (' + it.info.cls + ')';
+            box.appendChild(c);
+            total++;
+          });
+          if (row[0].indexOf('Honest') === 0) { box.appendChild(document.createTextNode('  NOT an attack')); }
+        }
+        box.appendChild(document.createTextNode('\n'));
+      });
+      var sum = document.createElement('span');
+      sum.className = 'cp';
+      sum.textContent = '-> ' + total + ' hidden or disguised codepoints revealed';
+      box.appendChild(sum);
+    })();
+    </script>
+  </article>
+
+  <!-- ---------- OSC 8 hyperlink spoof ---------- -->
+  <article class="issue" id="osc8">
+    <span class="tag">OSC 8 hyperlink spoof</span>
+    <h3><a class="cardanchor" href="#osc8">The link text is not the link</a></h3>
+    <p class="lead">The <b>OSC 8</b> escape turns terminal text into a clickable hyperlink -- and, like an HTML
+      <code>&lt;a&gt;</code>, the visible label and the real target are set separately. So program output can
+      print a link that <em>reads</em> <code>example.com</code> but <em>points</em> at <code>example.org</code>.
+      You see the label; the target hides in the escape.</p>
+    <div class="panes">
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you see</div><pre class="term"><span class="p">$</span> cat release-notes.txt
+Get the installer: <span style="color:#6ea8fe;text-decoration:underline">example.com</span>
+<span class="dim"># an ordinary-looking, clickable link</span></pre></div>
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term"><span class="p">$</span> stcat release-notes.txt
+Get the installer: <span class="neut">_</span>]8;;https://example.org<span class="neut">_</span>\example.com<span class="neut">_</span>]8;;<span class="neut">_</span>\
+   <span class="cp">-&gt; label "example.com"  --  target https://example.org</span></pre></div>
+    </div>
+    <p class="catch"><b>The catch:</b> the label and the target are independent, so the text you read is not the
+      site you reach -- the terminal twin of an HTML link whose text lies about its <code>href</code>.
+      <code>stcat</code> neutralizes the OSC 8 escape to an inert <code>_</code>, so the real target is in plain
+      sight, and secure-terminal ships OSC 8 off by default. Real class:
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-46322" rel="noopener">CVE-2023-46322</a> and the
+      hyperlink rows in the <a href="#classes">attack-class table</a>.</p>
+  </article>
+
+  <!-- ---------- alt-screen restore (dramatic playback) ---------- -->
+  <article class="issue" id="altscreen">
+    <span class="tag">alt-screen restore</span>
+    <h3><a class="cardanchor" href="#altscreen">The screen it painted leaves no trace</a></h3>
+    <p class="lead">The <b>alternate screen</b> (<code>?1049h</code>) is the full-screen buffer <code>vim</code>,
+      <code>less</code> and <code>htop</code> use: enter it, paint, then leave and your original scrollback is
+      back untouched. Legitimate -- until a log enters it, paints <em>fake</em> output, and leaves. The forged
+      full-screen view flashes by and vanishes, and your scrollback looks like nothing ever happened. Press
+      Play:</p>
+    <div class="asplayer">
+      <div class="tbar"><span class="dots"><i></i><i></i><i></i></span> <span id="as-cap">primary screen</span></div>
+      <pre class="term" id="as-screen" style="min-height:12.5em"><span class="p">$</span> cat deploy.log</pre>
+    </div>
+    <div class="ascontrols"><button class="btn ghost" id="as-play" type="button">Play</button>
+      <span class="dim" id="as-state">a safe re-enactment -- no real terminal is touched</span></div>
+    <p class="catch"><b>The catch:</b> the fake "ALL GREEN" dashboard was painted on the alternate screen, so
+      leaving it (the log never draws a scrollbar or newline into your buffer) restores your primary screen
+      exactly as it was -- no trace in scrollback. Alt-screen itself is a legitimate feature every terminal
+      supports; the deception is painting a convincing fake, then restoring so you never scroll back to catch
+      it. secure-terminal's default line mode strips <code>?1049h</code> and shows the log as inert text with
+      your scrollback intact, offering opt-in TUI mode if you actually want full-screen programs.</p>
+    <script>
+    /* CSP-safe framed playback (inline JS is allowed by this page's CSP). No
+       external library; frames are set via textContent only. A reusable little
+       primitive for showing a sequence of terminal states. */
+    (function () {
+      var screen = document.getElementById('as-screen');
+      var cap = document.getElementById('as-cap');
+      var btn = document.getElementById('as-play');
+      var state = document.getElementById('as-state');
+      if (!screen || !cap || !btn) { return; }
+      var PRIMARY =
+        '$ ls\n' +
+        'deploy.log  rollback.sh  README.md\n' +
+        '$ cat deploy.log\n';
+      var ALT =
+        '+--------------------------------------------------+\n' +
+        '|   DEPLOY MONITOR                    [ ALL GREEN ] |\n' +
+        '|                                                  |\n' +
+        '|   db migrate ................... OK              |\n' +
+        '|   cache warm ................... OK              |\n' +
+        '|   health probe ................. OK              |\n' +
+        '|   canary 5% .................... OK              |\n' +
+        '|                                                  |\n' +
+        '|   all systems nominal.  press q to quit.         |\n' +
+        '+--------------------------------------------------+\n';
+      var RESTORED = PRIMARY + '$ \n';
+      var FRAMES = [
+        { cap: 'primary screen',                 body: PRIMARY,  wait: 1100 },
+        { cap: 'ALTERNATE screen (fake output)', body: ALT,      wait: 2200 },
+        { cap: 'primary screen (restored)',      body: RESTORED, wait: 1600 }
+      ];
+      var END = 'primary screen -- scrollback shows NOTHING was painted';
+      var timer = null, i = 0;
+      function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
+      function show(n) {
+        var f = FRAMES[n];
+        cap.textContent = f.cap;
+        screen.textContent = f.body;
+      }
+      function step() {
+        show(i);
+        var f = FRAMES[i];
+        if (i < FRAMES.length - 1) {
+          i++;
+          timer = setTimeout(step, f.wait);
+        } else {
+          cap.textContent = END;
+          if (state) { state.textContent = 'the fake dashboard is gone without a trace -- press Play to replay'; }
+          btn.textContent = 'Replay';
+          btn.disabled = false;
+        }
+      }
+      function play() {
+        stopTimer();
+        i = 0;
+        btn.disabled = true;
+        btn.textContent = 'Playing...';
+        if (state) { state.textContent = 'a safe re-enactment -- no real terminal is touched'; }
+        step();
+      }
+      btn.addEventListener('click', play);
+    })();
+    </script>
   </article>
 </div></section>
 
