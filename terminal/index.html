@@ -34,7 +34,7 @@
     <span class="status" title="This page is AI-generated and pending human review">needs human review</span>
     <nav>
       <a href="/terminal/" class="active">Terminal</a>
-      <a href="/git-diffs-lie/">Diffs</a>
+      <a href="https://github.com/output-lies/git-diffs-lie">Diffs</a>
       <a href="/paste/">Paste</a>
       <a href="/analyze/">Analyze</a>
       <a href="/quiz/">Quiz</a>
@@ -67,7 +67,7 @@
   <div class="cta">
     <a class="btn primary" href="#unicode-show">See the tools</a>
     <a class="btn ghost" href="https://github.com/Kicksecure/helper-scripts">Get them</a>
-    <a class="btn ghost" href="/git-diffs-lie/">See the examples</a>
+    <a class="btn ghost" href="https://github.com/output-lies/git-diffs-lie">See the examples</a>
   </div>
   <p class="coverage">reveal hidden Unicode / neutralize escape sequences / sanitize untrusted strings</p>
 </div></section>
@@ -91,7 +91,7 @@
 </div></section>
 
 <section class="cat"><div class="wrap">
-  <p class="catdesc" style="max-width:74ch"><b>How to reproduce these:</b> each card below shows the exact command. Run the safe tool on any file and you see the same thing. Unlike the <a href="/git-diffs-lie/">diff corpus</a>, where every trick is a real git branch you can <code>git diff master..&lt;branch&gt;</code>, terminal and paste attacks are <em>techniques</em>, not stored fixtures, so they are demonstrated by the commands shown here and by the live demo on the <a href="/paste/">paste page</a>.</p>
+  <p class="catdesc" style="max-width:74ch"><b>How to reproduce these:</b> each card below shows the exact command. Run the safe tool on any file and you see the same thing. Unlike the <a href="https://github.com/output-lies/git-diffs-lie">diff corpus</a>, where every trick is a real git branch you can <code>git diff master..&lt;branch&gt;</code>, terminal and paste attacks are <em>techniques</em>, not stored fixtures, so they are demonstrated by the commands shown here and by the live demo on the <a href="/paste/">paste page</a>.</p>
 </div></section>
 
 <!-- ============ unicode-show ============ -->
@@ -644,7 +644,7 @@ deploy: OK
 <span class="p">$</span> unicode-show demo.log
 demo.log:2: <span class="cp">[U+001B]</span>]0;pwned<span class="cp">[U+0007]</span>...
    <span class="cp">-&gt; U+001B ESCAPE (Cc), U+0007 BELL (Cc)</span></pre>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> / <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/ansi-escape">view the diff on GitHub -&gt;</a></div><div class="copybox"><code class="cmd">git diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="https://github.com/output-lies/git-diffs-lie">Reproduce</a> / <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/ansi-escape">view the diff on GitHub -&gt;</a></div><div class="copybox"><code class="cmd">git diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="log-injection">
@@ -670,7 +670,7 @@ INFO: system all-good!
 <span class="dim"># stcat neutralizes the CR to _, so the real ERROR is right there</span>
 <span class="p">$</span> stcat access.log
 ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> / <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/lone-cr">view the diff on GitHub -&gt;</a></div><div class="copybox"><code class="cmd">git diff master..content/lone-cr</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="https://github.com/output-lies/git-diffs-lie">Reproduce</a> / <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/lone-cr">view the diff on GitHub -&gt;</a></div><div class="copybox"><code class="cmd">git diff master..content/lone-cr</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 </div></section>
 
@@ -684,7 +684,7 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
     <p class="lead">External diff drivers that neutralize, surface and fail
       closed on every trick a change can carry: content, filename, mode,
       symlink, submodule, ref name. See them, side by side, issue by issue.</p>
-    <p class="toolnote"><a href="/git-diffs-lie/">Open the examples
+    <p class="toolnote"><a href="https://github.com/output-lies/git-diffs-lie">Open the examples
       -&gt;</a> &nbsp; or grab the tools in
       <a href="https://github.com/Kicksecure/developer-meta-files">developer-meta-files</a><a class="arch" href="https://web.archive.org/web/20260219201723/https://github.com/Kicksecure/developer-meta-files" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>.</p>
   </article>
@@ -734,7 +734,7 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
         <h4>Explore</h4>
         <a href="/">Home</a>
         <a href="/terminal/">Terminal</a>
-        <a href="/git-diffs-lie/">Diffs</a>
+        <a href="https://github.com/output-lies/git-diffs-lie">Diffs</a>
         <a href="/paste/">Paste</a>
         <a href="/analyze/">Analyze</a>
         <a href="/quiz/">Quiz</a>
