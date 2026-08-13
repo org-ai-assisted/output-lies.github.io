@@ -27,7 +27,7 @@
 <meta name="twitter:image" content="https://output-lies.github.io/og-analyze.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css?v=3">
+<link rel="stylesheet" href="/style.css?v=4">
 <style>
   .abox{margin:22px 0 0}
   .abox textarea{width:100%;min-height:120px;resize:vertical;box-sizing:border-box;
@@ -457,6 +457,14 @@
           function () { input.value = safe; render(); ok('clipboard blocked; stripped in place instead'); });
       } else { input.value = safe; render(); ok('stripped in place'); }
     });
+
+    /* Preload from a sibling page (e.g. the terminal board's "send to x-ray
+       tool"): the content is handed over in sessionStorage, never over the
+       network, so this page still makes no request of its own. */
+    try {
+      var pre = sessionStorage.getItem('ol-xray-input');
+      if (pre !== null) { sessionStorage.removeItem('ol-xray-input'); input.value = pre; }
+    } catch (e) { /* sessionStorage unavailable; leave the box empty */ }
 
     render();
   })();

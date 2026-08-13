@@ -4,7 +4,7 @@
   Tools: Kicksecure/helper-scripts. Docs: kicksecure.com/wiki.
 -->
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>cat lies too: safe terminal text tools</title>
@@ -26,7 +26,7 @@
 <meta name="twitter:image" content="https://output-lies.github.io/og-terminal.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css?v=3">
+<link rel="stylesheet" href="/style.css?v=4">
 
 <header class="nav">
   <div class="wrap">
@@ -299,14 +299,14 @@ src/pay.py
   </article>
 </div></section>
 
-<!-- ============ combined board (Case D) ============ -->
+<!-- ============ combined board ============ -->
 <script src="/analyze/analyzer.js"></script>
 <section class="cat" id="board"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#board">One file, every trick</a></h2>
   <p class="catdesc">The cards above isolate one class each. Real hostile output stacks them. Here is one safe,
     self-labeling board that carries <em>every</em> display class at once -- download it, <code>cat</code> it,
     and x-ray it right here. It mirrors the
-    <a href="https://secure-terminal.github.io/comparison/#combined">Case D board</a> on the secure-terminal
+    <a href="https://secure-terminal.github.io/comparison/#combined">combined board</a> on the secure-terminal
     comparison.</p>
 
   <article class="issue" id="board-card">
@@ -323,7 +323,8 @@ src/pay.py
       are a plaintext warning; it runs on the alternate screen so your scrollback is preserved. The dangerous
       classes (clipboard, notification, input reflection, RCE) are deliberately NOT in a cat-able file.</p>
     <p class="toolnote"><a class="dl" href="/demos/terminal-attack-demo-WARNING-display-only-safe.txt" download>Download the board (2.4 KB .txt)</a>
-      -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>:</p>
+      -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>:
+      <a class="sendxray" id="board-send" href="/analyze/#tool">send to x-ray tool</a></p>
     <div class="copybox"><code class="cmd">curl -O https://output-lies.github.io/demos/terminal-attack-demo-WARNING-display-only-safe.txt
 unicode-show terminal-attack-demo-WARNING-display-only-safe.txt   # names every hidden byte</code><button class="copybtn" type="button" hidden>Copy</button></div>
 
@@ -412,6 +413,26 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
       sum.className = 'cp';
       sum.textContent = '-> ' + total + ' hidden or disguised codepoints revealed';
       box.appendChild(sum);
+    })();
+    </script>
+    <script>
+    /* "send to x-ray tool": fetch the same-origin demo board and hand it to the
+       /analyze/ x-ray tool via sessionStorage, so the tool's own render() shows
+       it (no analysis/render logic duplicated here). The anchor's href is the
+       graceful fallback: with no JS (or no fetch) the click just opens the tool. */
+    (function () {
+      var b = document.getElementById('board-send');
+      if (!b || !window.fetch) { return; }
+      b.addEventListener('click', function (e) {
+        e.preventDefault();
+        fetch('/demos/terminal-attack-demo-WARNING-display-only-safe.txt')
+          .then(function (r) { return r.text(); })
+          .then(function (t) {
+            try { sessionStorage.setItem('ol-xray-input', t); } catch (err) {}
+            location.href = '/analyze/#tool';
+          })
+          .catch(function () { location.href = '/analyze/#tool'; });
+      });
     })();
     </script>
   </article>
