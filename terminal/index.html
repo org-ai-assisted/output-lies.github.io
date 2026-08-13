@@ -30,7 +30,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="564" height="77" alt="output lies"></a>
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></a>
     <span class="status" title="This page is AI-generated and pending human review">needs human review</span>
     <nav>
       <a href="/terminal/" class="active">Terminal</a>
@@ -128,7 +128,7 @@ withdraw.py:1: # Subtract funds ... then <span class="cp">[U+2067]</span>refund 
       error (unreadable or undecodable). Scriptable, not just visible.
       (<a href="https://www.kicksecure.com/wiki/Unicode-show">docs</a><a class="arch" href="https://web.archive.org/web/20260311005257/https://www.kicksecure.com/wiki/Unicode-show" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>)</p>
     <figure class="shot">
-      <img src="/unicode-show-demo.png" width="810" height="334" loading="lazy"
+      <img src="/unicode-show-demo.webp" width="810" height="334" loading="lazy"
         alt="unicode-show run on a file named auth.py that reads like ordinary code. Each hidden character is flagged inline as a red bracketed codepoint such as [U+202E], and annotated on the next line in cyan with its codepoint, official name and category (RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, NO-BREAK SPACE, SPACE), plus a note that the final newline is missing.">
       <figcaption>The real tool in a terminal: run on a file that reads clean, unicode-show names and colors every hidden character right where it hides.</figcaption>
     </figure>
@@ -168,7 +168,7 @@ src/pay.py
       the exact codepoint.
       (<a href="https://www.kicksecure.com/wiki/Unicode#grep-find-unicode-wrapper">docs</a><a class="arch" href="https://web.archive.org/web/20260706215954/https://www.kicksecure.com/wiki/Unicode" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>)</p>
     <figure class="shot">
-      <img src="/grep-find-unicode-demo.png" width="850" height="315" loading="lazy"
+      <img src="/grep-find-unicode-demo.webp" width="850" height="315" loading="lazy"
         alt="A terminal where plain grep for validate matches only src/clean.js and silently skips the backdoored files, while grep-find-unicode-wrapper --recursive src/ names src/auth.js and src/pay.py with exit 0, and unicode-show src/auth.js identifies the hidden character as U+0430 Cyrillic small letter a.">
       <figcaption>The real tools: a plain <code>grep</code> for the word you read matches the honest file and skips the backdoored ones, <code>grep-find-unicode-wrapper</code> names the files that hide a look-alike, and <code>unicode-show</code> pins the exact codepoint.</figcaption>
     </figure>
@@ -210,7 +210,7 @@ src/pay.py
       (<a href="https://www.cve.org/CVERecord?id=CVE-2019-12735">CVE-2019-12735</a><a class="arch" href="https://web.archive.org/web/20260224131015/https://www.cve.org/CVERecord?id=CVE-2019-12735" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>).
       (<a href="https://github.com/Kicksecure/helper-scripts/blob/master/man/text-safety-scan.1.ronn">docs</a><a class="arch" href="https://web.archive.org/web/20260711194113/https://github.com/Kicksecure/helper-scripts/blob/master/man/text-safety-scan.1.ronn" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>)</p>
     <figure class="shot">
-      <img src="/text-safety-scan-demo.png" width="950" height="296" loading="lazy"
+      <img src="/text-safety-scan-demo.webp" width="950" height="296" loading="lazy"
         alt="A terminal running text-safety-scan on ./repo/changelog. One pass fires both plugins: unicode-show names a hidden U+0430 Cyrillic character, and modeline-show warns that a Vim modeline was found, quoting the line. text-safety-scan then reports FAIL with two findings, and echo $? prints 1.">
       <figcaption>The real tool: a single <code>text-safety-scan</code> run fires every plugin at once, here catching both a hidden Unicode character and a Vim modeline, and returns <code>1</code> (0 clean, 1 finding, 2 hard error). <code>text-safety-scan-find</code> runs the same checks over a whole tree.</figcaption>
     </figure>
@@ -255,7 +255,7 @@ src/pay.py
       the current line, so use <code>stcat</code> when you need the byte-exact
       record.</p>
     <figure class="shot">
-      <img src="/stcat-demo.png" width="930" height="277" loading="lazy"
+      <img src="/stcat-demo.webp" width="930" height="277" loading="lazy"
         alt="A terminal comparing cat and stcat on build.log. cat shows three green [ ok ] lines including all checks passed, hiding the failure. stcat reveals the red FAILED: auth bypass in login() line, with the erase and carriage return neutralized to _[2K_ and the green [ ok ] all checks passed kept.">
       <figcaption>The real tool: <code>cat</code> replays the escape and shows only the green pass, while <code>stcat</code> neutralizes the erase and carriage return to <code>_</code>, keeps the colors, and surfaces the hidden red FAILED line.</figcaption>
     </figure>
@@ -292,7 +292,7 @@ src/pay.py
       the sanitizer.
       (<a href="https://github.com/Kicksecure/helper-scripts/blob/master/man/sanitize-string.1.ronn">docs</a><a class="arch" href="https://web.archive.org/web/20260711194126/https://github.com/Kicksecure/helper-scripts/blob/master/man/sanitize-string.1.ronn" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>)</p>
     <figure class="shot">
-      <img src="/sanitize-demo.png" width="870" height="296" loading="lazy"
+      <img src="/sanitize-demo.webp" width="870" height="296" loading="lazy"
         alt="A terminal showing sanitize-string. An untrusted value with an embedded escape prints as red DROP TABLE users when echoed raw; after sanitize-string the escape is inert (shown as _[31m...) and no longer recolors. sanitize-string on a script tag returns plain alert(1) with tags stripped, and sanitize-string 12 caps a long value to leak: secret.">
       <figcaption>The real tool: an escape in an untrusted value recolors a raw log line (red), but the sanitized value is inert; HTML markup is stripped and the length is capped.</figcaption>
     </figure>
@@ -357,11 +357,11 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
       <a href="https://secure-terminal.github.io/comparison/#combined">secure-terminal</a> and it neutralizes
       the entire set in one frame.</p>
     <figure class="shot">
-      <img src="/tui-board-cat.png" width="762" height="518" loading="lazy"
+      <img src="/tui-board-cat.webp" width="762" height="518" loading="lazy"
         alt="A terminal after cat-ing the combined board: a catchy full-screen table renders, the window title bar is hijacked to 'terminal attack-class demo (safe)', and each row shows a live example of an attack class -- example.com, google.com, report exe.doc, verified, balance, hello, ABC, Greek text -- with every trick either invisible or disguised as ordinary text.">
       <figcaption>What <code>cat</code> shows: the board renders as a catchy full-screen table and the window
         title is hijacked -- every trick hidden or disguised. The x-ray beside it, and the safe tools, expose
-        them. (<a href="/tui-board-reveal.png">secure-terminal naming every codepoint</a>.)</figcaption>
+        them. (<a href="/tui-board-reveal.webp">secure-terminal naming every codepoint</a>.)</figcaption>
     </figure>
     <script>
     /* Live x-ray of the combined board, reusing the shared analyzer (window.OL).
@@ -623,7 +623,7 @@ Get the installer: <span class="neut">_</span>]8;;https://example.org<span class
     <p class="backdoor"><b>Backdoor path:</b> ship a poisoned log, README, or git repo; when a developer or admin views it in a vulnerable terminal, attacker bytes are echoed into the shell and run.</p>
     <p class="onrecord"><b>Proof of concept:</b> a well-documented class: iTerm2 <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-9535">CVE-2019-9535</a><a class="arch" href="https://web.archive.org/web/20260414161101/https://nvd.nist.gov/vuln/detail/CVE-2019-9535" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-45872">CVE-2022-45872</a><a class="arch" href="https://web.archive.org/web/20260102055000/https://nvd.nist.gov/vuln/detail/CVE-2022-45872" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> (RCE), xterm <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-27135">CVE-2021-27135</a><a class="arch" href="https://web.archive.org/web/20260312102057/https://nvd.nist.gov/vuln/detail/CVE-2021-27135" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, Windows Terminal <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-44702">CVE-2022-44702</a><a class="arch" href="https://web.archive.org/web/20251210235445/https://nvd.nist.gov/vuln/detail/CVE-2022-44702" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, and the <a href="https://dgl.cx/2023/09/ansi-terminal-security">ten CVEs</a><a class="arch" href="https://web.archive.org/web/20260617084902/https://dgl.cx/2023/09/ansi-terminal-security" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> David Leadbeater catalogued in 2023. And it keeps recurring: iTerm2 <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-38396">CVE-2024-38396</a> and the brand-new terminal <a href="https://dgl.cx/2024/12/ghostty-terminal-title">Ghostty</a> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2024-56803" rel="noopener">CVE-2024-56803</a>) were both hit by the same window-title-into-keystrokes trick in 2024, with a public proof of concept that opens the calculator from a single <code>cat</code>. The origin paper is <a href="https://hdm.io/writing/termulation.txt">HD Moore's "Terminal Emulator Security Issues" (2003)</a><a class="arch" href="https://web.archive.org/web/20260617084903/https://hdm.io/writing/termulation.txt" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>; see also <a href="https://www.cyberark.com/resources/threat-research-blog/dont-trust-this-title-abusing-terminal-emulators-with-ansi-escape-characters">CyberArk</a><a class="arch" href="https://web.archive.org/web/20260511163824/https://www.cyberark.com/resources/threat-research-blog/dont-trust-this-title-abusing-terminal-emulators-with-ansi-escape-characters" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>. All responsibly disclosed; none observed in the wild.</p>
     <figure class="shot">
-      <img src="/escape-rce-demo.png" width="790" height="277" loading="lazy"
+      <img src="/escape-rce-demo.webp" width="790" height="277" loading="lazy"
         alt="A terminal where cat notice.txt prints only 'Update installed. System healthy.' while the file secretly carries an OSC terminal-control sequence. stcat reveals the hidden payload as _]0;attacker@evil:~# _ before the visible text, and unicode-show names the hidden bytes U+001B (ESC) and U+0007 (BEL).">
       <figcaption>A safe demonstration of the mechanism: <code>cat</code> shows one innocuous line, but the file smuggles a terminal-control sequence that <code>cat</code> feeds straight to the terminal. <code>stcat</code> neutralizes it and <code>unicode-show</code> names the hidden ESC and BEL bytes. On a vulnerable terminal, this same channel is what escalates to injected keystrokes.</figcaption>
     </figure>
@@ -655,7 +655,7 @@ demo.log:2: <span class="cp">[U+001B]</span>]0;pwned<span class="cp">[U+0007]</s
     <p class="backdoor"><b>Backdoor path:</b> get attacker-controlled text into a log (via a crafted URL, a username, a header), then wait for someone to read the log in a terminal.</p>
     <p class="onrecord"><b>Proof of concept:</b> Apache Tomcat's <a href="https://nvd.nist.gov/vuln/detail/CVE-2025-55754">CVE-2025-55754</a><a class="arch" href="https://web.archive.org/web/20260611002953/https://nvd.nist.gov/vuln/detail/CVE-2025-55754" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> did not escape ANSI in log messages. Note the honesty gap these tools argue against: NVD scores it <b>9.6</b>, but <a href="https://tomcat.apache.org/security-9.html">Apache rates it Low</a><a class="arch" href="https://web.archive.org/web/20260630151002/https://tomcat.apache.org/security-9.html" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> ("no attack vector was found"): theoretical, not demonstrated end to end. There is no ATT&amp;CK technique for this display-layer forgery; the nearest, <a href="https://attack.mitre.org/techniques/T1070/003/">T1070.003</a><a class="arch" href="https://web.archive.org/web/20260616003318/https://attack.mitre.org/techniques/T1070/003/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, is about deleting logs, not deceiving the reader of an intact one.</p>
     <figure class="shot">
-      <img src="/log-injection-demo.png" width="930" height="277" loading="lazy"
+      <img src="/log-injection-demo.webp" width="930" height="277" loading="lazy"
         alt="A terminal where cat access.log prints a benign-looking line, 10.0.0.9 - GET /health 200 ok, while the log line hides an OSC 52 clipboard-write escape. stcat reveals the payload as _]52;c;ZWNobyBwd25lZAo=_ and unicode-show names the hidden U+001B (ESC) and U+0007 (BEL) bytes.">
       <figcaption>A safe demonstration: viewing the log looks like a routine health check, but the line hides an OSC 52 sequence that silently loads the reader's clipboard (here with a harmless <code>echo pwned</code>). <code>stcat</code> and <code>unicode-show</code> expose what plain <code>cat</code> hid.</figcaption>
     </figure>
@@ -726,7 +726,7 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
 <footer>
   <div class="wrap ftop">
     <div class="fbrand">
-      <span class="ftag"><img class="brandmark" src="/logo-wide.png" width="564" height="77" alt="output lies"></span>
+      <span class="ftag"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></span>
       <p>Neutralize. Surface. Fail closed.</p>
     </div>
     <nav class="fcols">
@@ -776,8 +776,8 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
   </div>
   <script src="/share.js"></script>
   <div class="wrap ffree">
-    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.png" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
-    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.png" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
     <a class="freebadge" href="https://github.com/output-lies/output-lies.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
   </div>
   <div class="wrap fbot">
