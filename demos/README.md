@@ -1,5 +1,38 @@
 # /demos/ -- downloadable demonstration files
 
+## unicode-gallery-safe-to-cat.txt
+
+A display-only gallery of the Unicode character space. `cat` it in a normal
+terminal and it prints a code-chart of every renderable block, then a labeled
+specimen of each risk class -- homoglyphs, bidi controls, zero-width and
+invisible bytes, non-ASCII spaces, combining marks, raw C0/C1 control bytes --
+with honest foreign text as the non-attack contrast.
+
+- **Safe to cat in ANY terminal.** Every raw control byte is followed by its own
+  terminator on the same line, so the terminal returns to ground state at every
+  newline: no unterminated control string, no window-title or alternate-screen
+  change, nothing persists (no `reset` needed). The only side effect is one `BEL`
+  beep; the bidi and combining specimens reorder/stack within their own line and
+  recover at the newline. Nothing is copied to your clipboard, typed at your
+  prompt, or run.
+- **What it is for.** Feed the same file to a safe tool and watch it label every
+  class: [secure-terminal](https://secure-terminal.github.io) tints each
+  character by risk (the [gallery on the compatibility
+  page](https://secure-terminal.github.io/compatibility/#unicode-gallery) shows
+  it), `unicode-show` / `stcat` annotate it, or paste it into the [analyze
+  x-ray](https://output-lies.github.io/analyze/). Its sibling
+  [`art.payload`](https://secure-terminal.github.io/comparison/#truecolor) does
+  the same for 24-bit colour.
+
+### Regenerate
+
+The bytes are the deterministic output of the `unicode-gallery.py` generator in
+the derivative-maker `dist-ai` package -- the single source of truth, so the file
+cannot drift from a hand edit. The header stamps the Unicode version it was built
+against. To reproduce it from a `dist-ai` checkout:
+
+    python3 usr/share/secure-terminal-shots/unicode-gallery.py > unicode-gallery-safe-to-cat.txt
+
 ## terminal-attack-demo-WARNING-display-only-safe.txt
 
 One safe, HONEST, self-labeling board that carries every terminal text-attack
