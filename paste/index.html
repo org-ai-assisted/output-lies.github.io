@@ -128,9 +128,14 @@
     <span class="tag">Auto-run on paste</span>
     <h3><a class="cardanchor" href="#autorun">The paste that presses Enter for you</a></h3>
     <p class="lead">A snippet ending in a newline runs the moment it is pasted into
-      a terminal. You meant to read it first; the newline did not wait. Modern
-      terminals added bracketed-paste to blunt this, but plenty of setups and
-      terminal apps still submit multi-line pastes immediately.</p>
+      a terminal. You meant to read it first; the newline did not wait. Bracketed
+      paste stops this only when both sides cooperate: the terminal wraps the
+      paste (near-universal now) <em>and</em> the program reading it neutralises the
+      embedded newline. Modern shells do by default (bash 5.1+, zsh); older or
+      minimal ones do not -- bash before 5.1, POSIX <code>/bin/sh</code> (dash) and
+      busybox ash, and any non-shell prompt (<code>cat</code>, a language REPL, a
+      serial console, <code>ssh</code> into an old box) still submit a multi-line
+      paste immediately.</p>
     <p class="catch"><b>Why it bites:</b> combined with a hidden line, there is no
       pause to notice anything: the copy, the paste, and the execution are one
       motion.</p>

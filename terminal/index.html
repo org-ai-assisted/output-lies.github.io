@@ -42,6 +42,7 @@
     </nav>
   </div>
   <div class="subnav"><div class="wrap">
+    <a href="#secure-terminal">Live terminal</a>
     <a href="#unicode-show">Reveal</a>
     <a href="#grep">Find</a>
     <a href="#scan">Scan</a>
@@ -92,6 +93,40 @@
 
 <section class="cat"><div class="wrap">
   <p class="catdesc" style="max-width:74ch"><b>How to reproduce these:</b> each card below shows the exact command. Run the safe tool on any file and you see the same thing. Unlike the <a href="/git-diffs-lie/">diff corpus</a>, where every trick is a real git branch you can <code>git diff master..&lt;branch&gt;</code>, terminal and paste attacks are <em>techniques</em>, not stored fixtures, so they are demonstrated by the commands shown here and by the live demo on the <a href="/paste/">paste page</a>.</p>
+</div></section>
+
+<!-- ============ secure-terminal ============ -->
+<section class="cat" id="secure-terminal"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#secure-terminal">The live terminal</a></h2>
+  <p class="catdesc">The tools below inspect one file when you remember to run them.
+    <a href="https://secure-terminal.github.io">secure-terminal</a> is the display
+    itself: a terminal that renders hostile output inert as it arrives, for every
+    command, paste and log line, with nothing to run first.</p>
+
+  <article class="issue">
+    <span class="tag">cat vs secure-terminal</span>
+    <h3><a class="cardanchor" href="#secure-terminal">Every byte inert, by default</a></h3>
+    <p class="lead">A normal terminal obeys the bytes: an escape repaints the prompt
+      or forges the title, a bidi control reorders a line, a hidden character rides
+      along unseen. secure-terminal parses no escape sequences at all -- colour is
+      clamped legible, cursor and screen control are neutralized, and every non-ASCII
+      byte is named <code>&lt;U+XXXX&gt;</code> or shown as an inert risk-tinted box.</p>
+    <div class="panes">
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> any terminal</div><pre class="term"><span class="p">$</span> cat deploy.log
+Deploying to &#x2067;production&#x2069;... done
+
+<span class="dim"># reads clean; an isolate reordered it and an OSC forged the title</span></pre></div>
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> secure-terminal</div><pre class="term"><span class="p">$</span> cat deploy.log
+Deploying to <span class="cp">[U+2067]</span>production<span class="cp">[U+2069]</span>... done
+<span class="w">! blocked OSC title escape</span></pre></div>
+    </div>
+    <p class="catch"><b>The catch:</b> the per-file tools are opt-in -- you have to
+      suspect a file first. secure-terminal makes the safe view the default for the
+      whole session, and an automated test asserts it writes zero bytes back to any
+      query. The measured, side-by-side comparison against ten emulators is on
+      <a href="https://secure-terminal.github.io/comparison/" rel="noopener">secure-terminal's
+      comparison page</a>.</p>
+  </article>
 </div></section>
 
 <!-- ============ unicode-show ============ -->
