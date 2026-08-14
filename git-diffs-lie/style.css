@@ -1,7 +1,7 @@
 /* git-diffs-lie -- shared style (extracted). AI-Assisted. */
 :root{
     --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#6b6f76; --line:#e4e2da;
-    --accent:#c62828; --safe:#1a7a49;
+    --accent:#c21a74; --safe:#1a7a49;
     --tbg:#14161b; --tfg:#cfd3da; --tdim:#727a8a; --twarn:#e0af68;
     --terr:#f7768e; --tnote:#7dcfff; --tadd:#9ece6a; --tdel:#f7768e; --tneut:#c0caf5;
     --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
@@ -21,7 +21,7 @@
   .brand b{color:var(--accent)}
   .brand .brandmark{height:26px;width:auto;display:block}
   footer .ftag .brandmark{height:24px;width:auto;display:block}
-  .nav .status{margin-left:12px;display:inline-block;text-decoration:none;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#c21a74;border-radius:5px;padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);transition:filter .15s,box-shadow .15s,transform .15s}
+  .nav .status{margin-left:12px;display:inline-block;text-decoration:none;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);transition:filter .15s,box-shadow .15s,transform .15s}
   .nav .status:hover{filter:brightness(1.1);box-shadow:0 2px 7px rgba(0,0,0,.3);transform:translateY(-1px)}
   .notice{background:#fbf3f2;border-bottom:1px solid #eccecb;color:#4a3c3b}
   .notice .wrap{padding:11px 20px;font-size:.92rem}
