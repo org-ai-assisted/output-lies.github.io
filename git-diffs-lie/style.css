@@ -21,7 +21,7 @@
   .brand b{color:var(--accent)}
   .brand .brandmark{height:26px;width:auto;display:block}
   footer .ftag .brandmark{height:24px;width:auto;display:block}
-  .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);transition:filter .15s,box-shadow .15s,transform .15s}
+  .nav .status{margin-left:12px;display:inline-block;text-decoration:none;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#c21a74;border-radius:5px;padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);transition:filter .15s,box-shadow .15s,transform .15s}
   .nav .status:hover{filter:brightness(1.1);box-shadow:0 2px 7px rgba(0,0,0,.3);transform:translateY(-1px)}
   .notice{background:#fbf3f2;border-bottom:1px solid #eccecb;color:#4a3c3b}
   .notice .wrap{padding:11px 20px;font-size:.92rem}
@@ -39,10 +39,13 @@
   .nav nav a:hover{color:var(--ink)}
   .nav nav{display:none}
   .nav .navtoggle:checked ~ nav{position:absolute;left:0;right:0;top:100%;display:flex;
-    flex-direction:column;align-items:stretch;gap:0;background:var(--bg);
+    flex-direction:column;align-items:stretch;gap:0;background:var(--bg);z-index:2;
     border-bottom:1px solid var(--line);padding:2px 20px 10px;box-shadow:0 12px 26px rgba(0,0,0,.10)}
   .nav .navtoggle:checked ~ nav a{padding:11px 2px;border-top:1px solid var(--line);
     font-size:1rem;white-space:normal;color:var(--ink)}
+  /* click-outside-to-close: invisible full-viewport label under the panel (no JS) */
+  .nav .navscrim{display:none}
+  .nav .navtoggle:checked ~ .navscrim{display:block;position:fixed;inset:0;z-index:1}
   @media(min-width:821px){
     .nav .menubtn{display:none}
     .nav nav{display:flex;gap:16px;align-items:center;position:static}
@@ -280,10 +283,10 @@ footer .fbot{padding-left:20px;padding-right:20px}
   footer .fbot{padding-left:22px;padding-right:22px}
   html{scroll-padding-top:76px}
   /* compact top bar so brand + status + toggle fit one row down to 320px */
-  .nav .status{font-size:0;padding:3px 7px}
-  .nav .status::after{content:"unreviewed";font-size:.58rem}
-  .nav .menubtn{font-size:0;padding:8px 10px}
-  .brand .brandmark{height:20px}
+  .nav .status{font-size:.56rem;padding:3px 7px}
+  .nav .menubtn{font-size:0;padding:9px 10px}
+  .nav .menubtn::before{margin-right:0}
+  .brand .brandmark{height:19px}
 }
 
 /* ===================== polish pass 2 ===================== */

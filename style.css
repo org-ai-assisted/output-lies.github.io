@@ -58,11 +58,15 @@ footer .ftag .tm{font-size:.72em;color:var(--muted);font-weight:600;margin-left:
 /* mobile (default): nav hidden; the checked toggle drops it as a panel */
 .nav nav{display:none}
 .nav .navtoggle:checked ~ nav{position:absolute;left:0;right:0;top:100%;display:flex;
-  flex-direction:column;align-items:stretch;gap:0;background:var(--bg);
+  flex-direction:column;align-items:stretch;gap:0;background:var(--bg);z-index:2;
   border-bottom:1px solid var(--line);padding:2px 20px 10px;
   box-shadow:0 12px 26px rgba(0,0,0,.10)}
 .nav .navtoggle:checked ~ nav a{padding:11px 2px;border-top:1px solid var(--line);
   font-size:1rem;white-space:normal;color:var(--ink)}
+/* click-outside-to-close: an invisible full-viewport label (same toggle) sits
+   under the open panel; a tap anywhere off the menu unchecks it. No JS. */
+.nav .navscrim{display:none}
+.nav .navtoggle:checked ~ .navscrim{display:block;position:fixed;inset:0;z-index:1}
 /* desktop: no toggle; nav is a normal inline row */
 @media(min-width:821px){
   .nav .menubtn{display:none}
@@ -356,7 +360,8 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(23,24,27,.06);
 .notice{background:#fbf3f2;border-bottom:1px solid #eccecb;color:#4a3c3b}
 .notice .wrap{padding:11px 20px;font-size:.92rem}
 .notice b{color:var(--accent)}
-.nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;
+.nav .status{margin-left:12px;display:inline-block;text-decoration:none;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;
   text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;
   padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);
   transition:filter .15s,box-shadow .15s,transform .15s}
@@ -365,10 +370,10 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(23,24,27,.06);
    the status shows a short "unreviewed" (full text stays in the DOM + title +
    desktop), the toggle is icon-only, the brand shrinks a touch */
 @media(max-width:640px){
-  .nav .status{font-size:0;padding:3px 7px}
-  .nav .status::after{content:"unreviewed";font-size:.58rem}
-  .nav .menubtn{font-size:0;padding:8px 10px}
-  .brand .brandmark{height:20px}
+  .nav .status{font-size:.56rem;padding:3px 7px}
+  .nav .menubtn{font-size:0;padding:9px 10px}
+  .nav .menubtn::before{margin-right:0}
+  .brand .brandmark{height:19px}
 }
 
 footer .fshare{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;max-width:1080px;margin:0 auto;padding:6px 20px 12px;font-size:.85rem;color:var(--muted)}
