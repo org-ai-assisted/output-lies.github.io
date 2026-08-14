@@ -8,7 +8,7 @@
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth;scroll-padding-top:112px}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
     line-height:1.55;-webkit-font-smoothing:antialiased}
   a{color:inherit}
@@ -16,7 +16,7 @@
 
   header.nav{position:sticky;top:0;z-index:10;background:rgba(243,242,238,.93);
     backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  .nav > .wrap{display:flex;align-items:center;gap:18px;height:56px}
+  .nav > .wrap{display:flex;align-items:center;gap:12px;min-height:56px;position:relative}
   .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px}
   .brand b{color:var(--accent)}
   .brand .brandmark{height:26px;width:auto;display:block}
@@ -26,9 +26,27 @@
   .notice{background:#fbf3f2;border-bottom:1px solid #eccecb;color:#4a3c3b}
   .notice .wrap{padding:11px 20px;font-size:.92rem}
   .notice b{color:var(--accent)}
-  .nav nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
-  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none}
+  /* menu toggle: CSS-only hidden checkbox + label; nav inline on desktop */
+  .nav .navtoggle{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+  .nav .menubtn{margin-left:auto;display:inline-block;cursor:pointer;user-select:none;
+    font:600 .82rem/1 var(--mono);color:var(--ink);border:1px solid var(--line);
+    border-radius:8px;padding:8px 12px}
+  .nav .menubtn::before{content:"";display:inline-block;width:15px;height:11px;
+    margin-right:8px;vertical-align:-1px;background:linear-gradient(currentColor 0 2px,
+    transparent 2px 4.5px,currentColor 4.5px 6.5px,transparent 6.5px 9px,currentColor 9px 11px)}
+  .nav .navtoggle:focus-visible + .menubtn{outline:2px solid var(--accent);outline-offset:2px}
+  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;white-space:nowrap}
   .nav nav a:hover{color:var(--ink)}
+  .nav nav{display:none}
+  .nav .navtoggle:checked ~ nav{position:absolute;left:0;right:0;top:100%;display:flex;
+    flex-direction:column;align-items:stretch;gap:0;background:var(--bg);
+    border-bottom:1px solid var(--line);padding:2px 20px 10px;box-shadow:0 12px 26px rgba(0,0,0,.10)}
+  .nav .navtoggle:checked ~ nav a{padding:11px 2px;border-top:1px solid var(--line);
+    font-size:1rem;white-space:normal;color:var(--ink)}
+  @media(min-width:821px){
+    .nav .menubtn{display:none}
+    .nav nav{display:flex;gap:16px;align-items:center;position:static}
+  }
 
   .hero{padding:48px 0 40px}
   .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;
@@ -141,9 +159,6 @@ footer .fcopy{color:var(--muted);font-size:.84rem}
     .thesis .grid{grid-template-columns:1fr}
     .panes{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr}
-    .nav > .wrap{height:auto;padding:9px 20px;flex-wrap:wrap;gap:4px 14px}
-    .nav nav{gap:9px 13px;font-size:.8rem;flex-basis:100%;margin-left:0}
-    .nav .status{order:3}
     .brand .brandmark{height:22px}
   }
 
@@ -171,12 +186,16 @@ footer .fcopy{color:var(--muted);font-size:.84rem}
 .tag.evi-rec{color:var(--ink);background:var(--line);border-color:var(--line)}
 .issue .tag + .tag{margin-left:6px}
 
-/* page-local sticky sub-nav (section jumps) + active global item */
-.nav .subnav{border-top:1px solid var(--line)}
-.nav .subnav .wrap{display:flex;gap:22px;height:40px;align-items:center;overflow-x:auto;white-space:nowrap}
-.nav .subnav a{font-family:var(--mono);font-size:.78rem;color:var(--muted);text-decoration:none}
-.nav .subnav a:hover{color:var(--ink)}
+/* inline "on this page" table of contents (replaces the old second sticky bar) */
 .nav nav a.active{color:var(--ink);font-weight:650}
+.toc{margin:0 0 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:13px 16px}
+.toc .toch{margin:0 0 9px;font:600 .66rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px}
+.toc li{margin:0}
+.toc a{font-family:var(--mono);font-size:.82rem;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.toc a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;flex:0 0 auto;opacity:.55}
+.toc a:hover{color:var(--accent)}
+.toc a:hover::before{opacity:1}
 section{scroll-margin-top:0}
 
 /* plain-language "what is this?" intro box */
@@ -259,9 +278,12 @@ footer .fbot{padding-left:20px;padding-right:20px}
   .wrap{padding-left:22px;padding-right:22px}
   footer .ftop{padding-left:22px;padding-right:22px}
   footer .fbot{padding-left:22px;padding-right:22px}
-  .nav .subnav .wrap{flex-wrap:wrap;white-space:normal;overflow-x:visible;height:auto;
-    gap:8px 16px;padding-top:7px;padding-bottom:7px}
-  html{scroll-padding-top:150px}
+  html{scroll-padding-top:76px}
+  /* compact top bar so brand + status + toggle fit one row down to 320px */
+  .nav .status{font-size:0;padding:3px 7px}
+  .nav .status::after{content:"unreviewed";font-size:.58rem}
+  .nav .menubtn{font-size:0;padding:8px 10px}
+  .brand .brandmark{height:20px}
 }
 
 /* ===================== polish pass 2 ===================== */

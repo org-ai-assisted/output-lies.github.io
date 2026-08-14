@@ -32,6 +32,8 @@
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></a>
     <span class="status" title="This page is AI-generated and pending human review">needs human review</span>
+    <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
+    <label class="menubtn" for="navtoggle">Menu</label>
     <nav>
       <a href="/terminal/">Terminal</a>
       <a href="/git-diffs-lie/" class="active">Diffs</a>
@@ -41,13 +43,6 @@
       <a href="https://secure-terminal.github.io">secure-terminal</a>
     </nav>
   </div>
-  <div class="subnav"><div class="wrap">
-    <a href="#wild">In the wild</a>
-    <a href="#on-record">Proof of concept</a>
-    <a href="#how">Mitigation</a>
-    <a href="#try">Try it</a>
-    <a href="#faq">FAQ</a>
-  </div></div>
 </header>
 
 <main>
@@ -65,6 +60,16 @@
   <p class="coverage">22 branches &middot; 5 seen in the wild &middot; one surprise each</p>
 </div></section>
 
+<div class="wrap"><nav class="toc" aria-label="On this page">
+  <p class="toch">On this page</p>
+  <ul>
+    <li><a href="#wild">In the wild</a></li>
+    <li><a href="#on-record">Proof of concept</a></li>
+    <li><a href="#how">Mitigation</a></li>
+    <li><a href="#try">Try it</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</nav></div>
 
 <section class="whatis"><div class="wrap">
   <p><b>What is this?</b> When you review a code change before accepting it, you trust

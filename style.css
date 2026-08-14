@@ -10,7 +10,7 @@
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:112px}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
   line-height:1.55;-webkit-font-smoothing:antialiased}
 a{color:inherit}
@@ -31,7 +31,7 @@ a{color:inherit}
 
 header.nav{position:sticky;top:0;z-index:10;background:rgba(243,242,238,.93);
   backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav > .wrap{display:flex;align-items:center;gap:18px;height:56px}
+.nav > .wrap{display:flex;align-items:center;gap:12px;min-height:56px;position:relative}
 .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
 .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
 .brand .brandmark{height:26px;width:auto;display:block}
@@ -40,10 +40,34 @@ footer .ftag .brandmark{height:24px;width:auto;display:block}
 .brand i{font-style:italic}
 .brand .tm{font-size:.72em;color:var(--muted);font-weight:600;margin-left:.14em;align-self:flex-start;line-height:1}
 footer .ftag .tm{font-size:.72em;color:var(--muted);font-weight:600;margin-left:.12em;align-self:flex-start;line-height:1}
-.nav nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
-.nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none}
+/* menu toggle: CSS-only (a hidden checkbox + its label). On desktop the nav is
+   a normal inline element; on mobile it collapses behind the labelled toggle.
+   No JS (CSP-safe) and no <details> closed-content quirk. */
+.nav .navtoggle{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.nav .menubtn{margin-left:auto;display:inline-block;cursor:pointer;user-select:none;
+  font:600 .82rem/1 var(--mono);color:var(--ink);border:1px solid var(--line);
+  border-radius:8px;padding:8px 12px}
+.nav .menubtn::before{content:"";display:inline-block;width:15px;height:11px;
+  margin-right:8px;vertical-align:-1px;background:linear-gradient(currentColor 0 2px,
+  transparent 2px 4.5px,currentColor 4.5px 6.5px,transparent 6.5px 9px,currentColor 9px 11px)}
+.nav .navtoggle:focus-visible + .menubtn{outline:2px solid var(--accent);outline-offset:2px}
+.nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;white-space:nowrap}
 .nav nav a:hover{color:var(--ink)}
 .nav nav a.cross{color:var(--ink)}
+.nav nav a.active{color:var(--ink);font-weight:650}
+/* mobile (default): nav hidden; the checked toggle drops it as a panel */
+.nav nav{display:none}
+.nav .navtoggle:checked ~ nav{position:absolute;left:0;right:0;top:100%;display:flex;
+  flex-direction:column;align-items:stretch;gap:0;background:var(--bg);
+  border-bottom:1px solid var(--line);padding:2px 20px 10px;
+  box-shadow:0 12px 26px rgba(0,0,0,.10)}
+.nav .navtoggle:checked ~ nav a{padding:11px 2px;border-top:1px solid var(--line);
+  font-size:1rem;white-space:normal;color:var(--ink)}
+/* desktop: no toggle; nav is a normal inline row */
+@media(min-width:821px){
+  .nav .menubtn{display:none}
+  .nav nav{display:flex;gap:16px;align-items:center;position:static}
+}
 
 .hero{padding:clamp(28px,7vw,48px) 0 clamp(22px,5vw,40px)}
 /* tight: hero sits directly above the primary interactive tool (analyze, quiz),
@@ -170,20 +194,22 @@ footer .fcopy{color:var(--muted);font-size:.84rem}
   .thesis .grid{grid-template-columns:1fr}
   .panes{grid-template-columns:1fr}
   .cards{grid-template-columns:1fr}
-  .nav nav{gap:12px;font-size:.82rem}
-  .nav nav a.hidemob{display:none}
-  .nav > .wrap{flex-wrap:wrap;height:auto;row-gap:8px;padding-top:9px;padding-bottom:9px}
-  .nav .status{order:3}
-  .nav nav{flex-basis:100%;margin-left:0}
   .brand .brandmark{height:22px}
 }
 
-/* page-local sticky sub-nav (section jumps) + active global item */
-.nav .subnav{border-top:1px solid var(--line)}
-.nav .subnav .wrap{display:flex;gap:22px;height:40px;align-items:center;overflow-x:auto;white-space:nowrap}
-.nav .subnav a{font-family:var(--mono);font-size:.78rem;color:var(--muted);text-decoration:none}
-.nav .subnav a:hover{color:var(--ink)}
-.nav nav a.active{color:var(--ink);font-weight:650}
+/* inline "on this page" table of contents (replaces the old second sticky bar) */
+.toc{margin:0 0 6px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);padding:13px 16px}
+.toc .toch{margin:0 0 9px;font:600 .66rem/1 var(--mono);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px}
+.toc li{margin:0}
+.toc a{font-family:var(--mono);font-size:.82rem;color:var(--ink);text-decoration:none;
+  display:inline-flex;align-items:center;gap:7px}
+.toc a::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);
+  display:inline-block;flex:0 0 auto;opacity:.55}
+.toc a:hover{color:var(--accent)}
+.toc a:hover::before{opacity:1}
 section{scroll-margin-top:0}
 
 /* plain-language "what is this?" intro box */
@@ -290,14 +316,11 @@ footer .ftag .logo{display:block;flex:0 0 auto}
 /* footer: same horizontal gutter as the body (was 0 -> content touched the edges) */
 footer .ftop{padding-left:20px;padding-right:20px}
 footer .fbot{padding-left:20px;padding-right:20px}
-/* mobile: more side air; wrap the section sub-nav instead of scrolling it sideways */
+/* mobile: more side air */
 @media(max-width:640px){
   .wrap{padding-left:22px;padding-right:22px}
   footer .ftop{padding-left:22px;padding-right:22px}
   footer .fbot{padding-left:22px;padding-right:22px}
-  .nav .subnav .wrap{flex-wrap:wrap;white-space:normal;overflow-x:visible;height:auto;
-    gap:8px 16px;padding-top:7px;padding-bottom:7px}
-  html{scroll-padding-top:150px}
 }
 
 /* ===================== polish pass 2 ===================== */
@@ -338,7 +361,15 @@ code{font-family:var(--mono);font-size:.88em;background:rgba(23,24,27,.06);
   padding:3px 8px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.18);
   transition:filter .15s,box-shadow .15s,transform .15s}
 .nav .status:hover{filter:brightness(1.1);box-shadow:0 2px 7px rgba(0,0,0,.3);transform:translateY(-1px)}
-@media(max-width:640px){ .nav .status{font-size:.6rem;padding:2px 6px} }
+/* compact the top bar so brand + status + toggle fit one row down to 320px:
+   the status shows a short "unreviewed" (full text stays in the DOM + title +
+   desktop), the toggle is icon-only, the brand shrinks a touch */
+@media(max-width:640px){
+  .nav .status{font-size:0;padding:3px 7px}
+  .nav .status::after{content:"unreviewed";font-size:.58rem}
+  .nav .menubtn{font-size:0;padding:8px 10px}
+  .brand .brandmark{height:20px}
+}
 
 footer .fshare{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;max-width:1080px;margin:0 auto;padding:6px 20px 12px;font-size:.85rem;color:var(--muted)}
 footer .fshare .fshare-l{color:var(--muted)}
