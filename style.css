@@ -53,6 +53,10 @@ footer .ftag .tm{font-size:.72em;color:var(--muted);font-weight:600;margin-left:
 .nav .navtoggle:focus-visible + .menubtn{outline:2px solid var(--accent);outline-offset:2px}
 .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;white-space:nowrap}
 .nav nav a:hover{color:var(--ink)}
+/* mark an off-site nav link with a small external-link arrow (decorative; the link text
+   is the accessible name) */
+.nav nav a[href^="http"]::after{content:"\2197";font-size:.82em;opacity:.6;margin-left:1px;vertical-align:.05em}
+.nav nav a[href^="http"]:hover::after{opacity:.95}
 .nav nav a.cross{color:var(--ink)}
 .nav nav a.active{color:var(--ink);font-weight:650}
 /* mobile (default): nav hidden; the checked toggle drops it as a panel */
