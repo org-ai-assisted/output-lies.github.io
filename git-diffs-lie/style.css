@@ -1,7 +1,7 @@
 /* git-diffs-lie -- shared style (extracted). AI-Assisted. */
 :root{
     --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#6b6f76; --line:#e4e2da;
-    --accent:#d83933; --safe:#1f8a54;
+    --accent:#c62828; --safe:#1a7a49;
     --tbg:#14161b; --tfg:#cfd3da; --tdim:#727a8a; --twarn:#e0af68;
     --terr:#f7768e; --tnote:#7dcfff; --tadd:#9ece6a; --tdel:#f7768e; --tneut:#c0caf5;
     --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
@@ -33,7 +33,7 @@
   .hero{padding:48px 0 40px}
   .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;
     text-transform:uppercase;color:var(--accent);margin:0 0 14px}
-  .hero h1{font-size:clamp(2.3rem,7vw,4.4rem);line-height:1.02;letter-spacing:-.03em;
+  .hero h1{font-size:clamp(2.3rem,7vw,4.4rem);line-height:1.02;letter-spacing:-.03em;text-wrap:balance;
     margin:0 0 18px;font-weight:800}
   .hero h1 .u{text-decoration:underline;text-decoration-color:var(--accent);
     text-underline-offset:6px}
