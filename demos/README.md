@@ -21,8 +21,7 @@ with honest foreign text as the non-attack contrast.
   page](https://secure-terminal.github.io/compatibility/#unicode-gallery) shows
   it), `unicode-show` / `stcat` annotate it, or paste it into the [analyze
   x-ray](https://output-lies.github.io/analyze/). Its sibling
-  [`art.payload`](https://secure-terminal.github.io/comparison/#truecolor) does
-  the same for 24-bit colour.
+  [`art-safe-to-cat.txt`](art-safe-to-cat.txt) does the same for 24-bit colour.
 
 ### Regenerate
 
@@ -32,6 +31,28 @@ cannot drift from a hand edit. The header stamps the Unicode version it was buil
 against. To reproduce it from a `dist-ai` checkout:
 
     python3 usr/share/secure-terminal-shots/unicode-gallery.py > unicode-gallery-safe-to-cat.txt
+
+## art-safe-to-cat.txt
+
+A display-only piece of terminal art -- a 24-bit-colour scene (a sunset beach and
+rolling green hills) drawn entirely from SGR truecolour and the upper-half-block
+glyph, which doubles the vertical resolution for smooth gradients.
+
+- **Safe to cat in ANY terminal.** It emits only SGR colour, the half-block glyph
+  and newlines, and ends every line with a reset -- no cursor moves, no screen
+  clear, no title or alternate-screen change, nothing that persists. It paints a
+  scene and leaves your scrollback clean.
+- **What it is for.** The colour counterpart to
+  [`unicode-gallery-safe-to-cat.txt`](unicode-gallery-safe-to-cat.txt): a safe
+  terminal is not a plain one. See it rendered on the
+  [comparison page](https://secure-terminal.github.io/comparison/#truecolor).
+
+### Regenerate
+
+Deterministic output (a pure function of pixel position) of the `truecolor-art.py`
+generator in the derivative-maker `dist-ai` package. From a `dist-ai` checkout:
+
+    python3 usr/share/secure-terminal-shots/truecolor-art.py > art-safe-to-cat.txt
 
 ## terminal-attack-demo-WARNING-display-only-safe.txt
 
