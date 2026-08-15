@@ -4,7 +4,7 @@
   Every payload on this page is benign and for education only.
 -->
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>git diffs lie: every case</title>
@@ -295,28 +295,4 @@ cat: link-dangling: No such file or directory
   </div>
 </footer>
 
-<script>
-/* Progressive enhancement only: reveal "Copy" buttons when JS + the async
-   Clipboard API are present. With JS off the commands remain plain, fully
-   selectable text. All code is inline; no third-party origin is contacted. */
-(function () {
-  if (!navigator.clipboard) return;
-  var boxes = document.querySelectorAll('.copybox');
-  for (var i = 0; i < boxes.length; i++) {
-    (function (box) {
-      var cmd = box.querySelector('.cmd');
-      var btn = box.querySelector('.copybtn');
-      if (!cmd || !btn) return;
-      btn.hidden = false;
-      btn.addEventListener('click', function () {
-        navigator.clipboard.writeText(cmd.textContent).then(function () {
-          var prev = btn.textContent;
-          btn.textContent = 'Copied';
-          btn.classList.add('ok');
-          setTimeout(function () { btn.textContent = prev; btn.classList.remove('ok'); }, 1200);
-        });
-      });
-    })(boxes[i]);
-  }
-})();
-</script>
+<script src="copy.js"></script>

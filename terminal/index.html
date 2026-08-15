@@ -4,7 +4,7 @@
   Tools: Kicksecure/helper-scripts. Docs: kicksecure.com/wiki.
 -->
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>cat lies too: safe terminal text tools</title>
@@ -405,77 +405,8 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
         title is hijacked -- every trick hidden or disguised. The x-ray beside it, and the safe tools, expose
         them. (<a href="/tui-board-reveal.webp">secure-terminal naming every codepoint</a>.)</figcaption>
     </figure>
-    <script>
-    /* Live x-ray of the combined board, reusing the shared analyzer (window.OL).
-       Renders via DOM text nodes only (never innerHTML), so nothing can inject
-       markup. If JavaScript is off, the static reveal above stands in. */
-    (function () {
-      if (typeof OL === 'undefined') { return; }
-      var box = document.getElementById('board-xray');
-      if (!box) { return; }
-      var ROWS = [
-        ['Homoglyph (Cyrillic)',  'ex\u0430mple.com'],
-        ['Homoglyph (Greek)',     'go\u03BFgle.com'],
-        ['ASCII look-alike',      'rnicrosoft.com'],
-        ['Bidi override (RTL)',   'report \u202Ecod.exe\u202C'],
-        ['Zero-width space',      'veri\u200Bfied'],
-        ['Invisible / BOM',       '\uFEFFbalance'],
-        ['Combining (Zalgo)',     'h\u0301\u0300\u0323\u0308e\u0301\u0300\u0323\u0308llo'],
-        ['Fullwidth forms',       '\uFF21\uFF22\uFF23'],
-        ['Honest foreign (Greek)','\u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC']
-      ];
-      function pad(s) { while (s.length < 22) { s += ' '; } return s; }
-      function dim(t) { var s = document.createElement('span'); s.className = 'dim'; s.textContent = t; return s; }
-      box.textContent = '';
-      box.appendChild(dim('# each hidden/disguised codepoint, named -- x-rayed live by the analyzer:'));
-      box.appendChild(document.createTextNode('\n'));
-      var total = 0;
-      ROWS.forEach(function (row) {
-        box.appendChild(dim(pad(row[0])));
-        var res = OL.analyze(row[1]);
-        if (res.flagged === 0) {
-          box.appendChild(document.createTextNode(row[1] + '  '));
-          box.appendChild(dim('(pure ASCII -- rn reads as m)'));
-        } else {
-          res.items.forEach(function (it) {
-            if (it.safe !== undefined) { box.appendChild(document.createTextNode(it.safe)); return; }
-            var c = document.createElement('span');
-            c.className = 'cp';
-            c.textContent = '[' + OL.hex(it.cp) + ']';
-            c.title = it.info.name + ' (' + it.info.cls + ')';
-            box.appendChild(c);
-            total++;
-          });
-          if (row[0].indexOf('Honest') === 0) { box.appendChild(document.createTextNode('  NOT an attack')); }
-        }
-        box.appendChild(document.createTextNode('\n'));
-      });
-      var sum = document.createElement('span');
-      sum.className = 'cp';
-      sum.textContent = '-> ' + total + ' hidden or disguised codepoints revealed';
-      box.appendChild(sum);
-    })();
-    </script>
-    <script>
-    /* "send to x-ray tool": fetch the same-origin demo board and hand it to the
-       /analyze/ x-ray tool via sessionStorage, so the tool's own render() shows
-       it (no analysis/render logic duplicated here). The anchor's href is the
-       graceful fallback: with no JS (or no fetch) the click just opens the tool. */
-    (function () {
-      var b = document.getElementById('board-send');
-      if (!b || !window.fetch) { return; }
-      b.addEventListener('click', function (e) {
-        e.preventDefault();
-        fetch('/demos/terminal-attack-demo-WARNING-display-only-safe.txt')
-          .then(function (r) { return r.text(); })
-          .then(function (t) {
-            try { sessionStorage.setItem('ol-xray-input', t); } catch (err) {}
-            location.href = '/analyze/#tool';
-          })
-          .catch(function () { location.href = '/analyze/#tool'; });
-      });
-    })();
-    </script>
+    <script src="/terminal/xray.js"></script>
+    <script src="/terminal/send.js"></script>
   </article>
 
   <!-- ---------- OSC 8 hyperlink spoof ---------- -->
@@ -523,69 +454,7 @@ Get the installer: <span class="neut">_</span>]8;;https://example.org<span class
       supports; the deception is painting a convincing fake, then restoring so you never scroll back to catch
       it. secure-terminal's default line mode strips <code>?1049h</code> and shows the log as inert text with
       your scrollback intact, offering opt-in TUI mode if you actually want full-screen programs.</p>
-    <script>
-    /* CSP-safe framed playback (inline JS is allowed by this page's CSP). No
-       external library; frames are set via textContent only. A reusable little
-       primitive for showing a sequence of terminal states. */
-    (function () {
-      var screen = document.getElementById('as-screen');
-      var cap = document.getElementById('as-cap');
-      var btn = document.getElementById('as-play');
-      var state = document.getElementById('as-state');
-      if (!screen || !cap || !btn) { return; }
-      var PRIMARY =
-        '$ ls\n' +
-        'deploy.log  rollback.sh  README.md\n' +
-        '$ cat deploy.log\n';
-      var ALT =
-        '+--------------------------------------------------+\n' +
-        '|   DEPLOY MONITOR                    [ ALL GREEN ] |\n' +
-        '|                                                  |\n' +
-        '|   db migrate ................... OK              |\n' +
-        '|   cache warm ................... OK              |\n' +
-        '|   health probe ................. OK              |\n' +
-        '|   canary 5% .................... OK              |\n' +
-        '|                                                  |\n' +
-        '|   all systems nominal.  press q to quit.         |\n' +
-        '+--------------------------------------------------+\n';
-      var RESTORED = PRIMARY + '$ \n';
-      var FRAMES = [
-        { cap: 'primary screen',                 body: PRIMARY,  wait: 1100 },
-        { cap: 'ALTERNATE screen (fake output)', body: ALT,      wait: 2200 },
-        { cap: 'primary screen (restored)',      body: RESTORED, wait: 1600 }
-      ];
-      var END = 'primary screen -- scrollback shows NOTHING was painted';
-      var timer = null, i = 0;
-      function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
-      function show(n) {
-        var f = FRAMES[n];
-        cap.textContent = f.cap;
-        screen.textContent = f.body;
-      }
-      function step() {
-        show(i);
-        var f = FRAMES[i];
-        if (i < FRAMES.length - 1) {
-          i++;
-          timer = setTimeout(step, f.wait);
-        } else {
-          cap.textContent = END;
-          if (state) { state.textContent = 'the fake dashboard is gone without a trace -- press Play to replay'; }
-          btn.textContent = 'Replay';
-          btn.disabled = false;
-        }
-      }
-      function play() {
-        stopTimer();
-        i = 0;
-        btn.disabled = true;
-        btn.textContent = 'Playing...';
-        if (state) { state.textContent = 'a safe re-enactment -- no real terminal is touched'; }
-        step();
-      }
-      btn.addEventListener('click', play);
-    })();
-    </script>
+    <script src="/terminal/playback.js"></script>
   </article>
 </div></section>
 

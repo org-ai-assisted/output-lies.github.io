@@ -4,7 +4,7 @@
   Every payload on this page is benign and for education only.
 -->
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>git diffs lie: adversarial diffs, side by side</title>
@@ -671,77 +671,11 @@ b/data/config.env differ</span>
     <button class="sh" data-net="md" type="button">Copy as Markdown</button>
     <span class="sh-msg" aria-live="polite"></span>
   </div>
-  <script>
-    /* Local-only share links. No third-party script or resource is loaded; a
-       target opens only when the user clicks it. */
-    (function () {
-      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
-      var L = {
-        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
-        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
-        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
-        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
-        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
-        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
-        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
-        email: 'mailto:?subject=' + t + '&body=' + u
-      };
-      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
-        var n = a.getAttribute('data-net');
-        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
-      });
-      var m = document.querySelector('.fshare [data-net=mastodon]');
-      if (m) m.addEventListener('click', function (e) {
-        e.preventDefault();
-        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
-        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
-          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
-      });
-      var msg = document.querySelector('.fshare .sh-msg');
-      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
-      var c = document.querySelector('.fshare [data-net=copy]');
-      if (c) c.addEventListener('click', function () {
-        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
-      });
-      var md = document.querySelector('.fshare [data-net=md]');
-      if (md) md.addEventListener('click', function () {
-        var text = '[' + document.title + '](' + location.href + ')';
-        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
-      });
-    })();
-  </script>
+  <script src="share.js"></script>
   <div class="wrap fbot">
     <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
     <span class="fcopy sp">Built with AI assistance</span>
   </div>
 </footer>
 
-<script>
-/* Progressive enhancement only: reveal "Copy" buttons when JS + the async
-   Clipboard API are present. With JS off the commands remain plain, fully
-   selectable text; nothing here is required to read or use the page.
-   All code is inline; no third-party origin is contacted. */
-(function () {
-  if (!navigator.clipboard) return;
-  var boxes = document.querySelectorAll('.copybox');
-  for (var i = 0; i < boxes.length; i++) {
-    (function (box) {
-      var cmd = box.querySelector('.cmd');
-      var btn = box.querySelector('.copybtn');
-      if (!cmd || !btn) return;
-      btn.hidden = false;
-      btn.addEventListener('click', function () {
-        navigator.clipboard.writeText(cmd.textContent).then(function () {
-          var prev = btn.textContent;
-          btn.textContent = 'Copied';
-          btn.classList.add('ok');
-          setTimeout(function () {
-            btn.textContent = prev;
-            btn.classList.remove('ok');
-          }, 1200);
-        });
-      });
-    })(boxes[i]);
-  }
-})();
-</script>
+<script src="copy.js"></script>
