@@ -143,6 +143,13 @@
   .qa h4{margin:0 0 6px;font-size:1.06rem}
   .qa p{margin:0;color:#3a3c41;max-width:72ch}
   .qa a{color:var(--accent)}
+  /* FAQ: two readable columns on desktop so the Q&A list fills the width instead
+     of one narrow column beside a wide empty right gutter. Heading spans both. */
+  @media(min-width:760px){
+    .faq > .wrap{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;align-items:start}
+    .faq > .wrap > .catname,.faq > .wrap > .catdesc{grid-column:1 / -1}
+    .faq .qa p{max-width:none}
+  }
 
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:36px}
 footer .ftop{display:flex;gap:40px 56px;flex-wrap:wrap;justify-content:space-between;padding:38px 0 30px}

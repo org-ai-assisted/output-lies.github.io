@@ -246,6 +246,14 @@ section{scroll-margin-top:0}
 .qa h4:hover a.qanchor::after,.qa h4 a.qanchor:focus::after{opacity:.55}
 .qa:target{scroll-margin-top:120px}
 .qa:target h4 a.qanchor{color:var(--accent)}
+/* FAQ: two readable columns on desktop so the Q&A list fills the width instead
+   of one narrow column beside a wide empty right gutter (matches the card grids
+   the other sections use). Heading + intro span both columns. */
+@media(min-width:760px){
+  .faq > .wrap{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;align-items:start}
+  .faq > .wrap > .catname,.faq > .wrap > .catdesc{grid-column:1 / -1}
+  .faq .qa p{max-width:none}
+}
 
 /* copy-paste-able command boxes -- button is a JS enhancement */
 .cmdlabel{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:16px 0 5px}
