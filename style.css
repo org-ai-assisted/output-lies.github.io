@@ -172,10 +172,6 @@ code,.term{unicode-bidi:isolate}
 
 .toolnote{margin:22px 0 0;color:#3a3c41;font-size:.95rem}
 .toolnote a{color:var(--accent)}
-.toolnote a.sendxray{display:inline-block;margin-left:6px;color:var(--ink);text-decoration:none;
-  font:600 .85rem var(--sans);padding:6px 13px;border:1px solid var(--ink);border-radius:8px;
-  cursor:pointer;transition:transform .15s,border-color .15s,color .15s}
-.toolnote a.sendxray:hover{transform:translateY(-1px);border-color:var(--accent);color:var(--accent)}
 
 .outro{padding:56px 0}
 .outro h2{font-size:1.6rem;letter-spacing:-.02em;margin:0 0 10px}

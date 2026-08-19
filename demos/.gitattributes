@@ -1,7 +1,0 @@
-# The demonstration payload is a raw terminal byte stream -- escape and control
-# bytes, not human-readable text. Classify it as binary so git treats it as a
-# data blob (no text diffs) and the ASCII/Unicode commit gate skips it, exactly
-# as it skips a PNG. GitHub Pages still serves it verbatim as text/plain.
-terminal-attack-demo-WARNING-display-only-safe.txt binary
-unicode-gallery-safe-to-cat.txt binary
-art-safe-to-cat.txt binary

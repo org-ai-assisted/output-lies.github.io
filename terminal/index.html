@@ -363,10 +363,10 @@ src/pay.py
       alternate screen (both undone by <code>reset</code>), and copies, types and runs nothing. Its first bytes
       are a plaintext warning; it runs on the alternate screen so your scrollback is preserved. The dangerous
       classes (clipboard, notification, input reflection, RCE) are deliberately NOT in a cat-able file.</p>
-    <p class="toolnote"><a class="dl" href="/demos/terminal-attack-demo-WARNING-display-only-safe.txt" download>Download the board (2.4 KB .txt)</a>
-      -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>:
-      <a class="sendxray" id="board-send" href="/analyze/#tool">send to x-ray tool</a></p>
-    <div class="copybox"><code class="cmd">curl -O https://output-lies.github.io/demos/terminal-attack-demo-WARNING-display-only-safe.txt
+    <p class="toolnote"><a class="dl" href="https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt" rel="noopener">Get the board (2.4 KB .txt)</a>
+      from the <a href="https://github.com/secure-terminal/terminal-safe-corpus" rel="noopener">terminal-safe-corpus</a>
+      -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>.</p>
+    <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt
 unicode-show terminal-attack-demo-WARNING-display-only-safe.txt   # names every hidden byte</code><button class="copybtn" type="button" hidden>Copy</button></div>
 
     <div class="panes">
@@ -406,7 +406,6 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
         them. (<a href="/tui-board-reveal.webp">secure-terminal naming every codepoint</a>.)</figcaption>
     </figure>
     <script src="/terminal/xray.js"></script>
-    <script src="/terminal/send.js"></script>
   </article>
 
   <!-- ---------- OSC 8 hyperlink spoof ---------- -->
