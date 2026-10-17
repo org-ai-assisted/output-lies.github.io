@@ -1,0 +1,5 @@
+## Declarative test-policy selector for the unified webcheck suite (dist_ai.webcheck).
+## A hand-authored family Pages site -> the `family` policy (FAMILY cross-links, wording,
+## review banner, card/footer rules). Authoritative over the markup heuristic.
+## Loader: dist-ai usr/lib/python3/dist-packages/dist_ai/webcheck/config.py
+policies: [family]
