@@ -54,7 +54,7 @@ jobs:
     container: debian:trixie-slim
     steps:
       - name: Install tools
-        run: apt-get update && apt-get install --yes --no-install-recommends git python3 ca-certificates
+        run: apt-get update && apt-get install --yes --no-install-recommends git python3 python3-pil ca-certificates
 
       - name: Check out output-lies.github.io
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
