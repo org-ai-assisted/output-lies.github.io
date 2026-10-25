@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!--
   cat lies too: safe terminal text tools showcase. AI-Assisted.
   Source: https://github.com/output-lies/output-lies.github.io
@@ -43,7 +44,7 @@
       <a href="https://secure-terminal.github.io">secure-terminal</a>
       <a href="https://org-ai-assisted.github.io/automated-test-results/">Test results</a>
     </nav>
-    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
+    <label class="navscrim" for="navtoggle"></label>
   </div>
 </header>
 
@@ -406,15 +407,15 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
     your terminal, they render every byte defensively. Every one of them does three
     things:</p>
   <div class="steps">
-    <div class="step"><div class="num">01</div><h4>Neutralize</h4>
+    <div class="step"><div class="num">01</div><h3>Neutralize</h3>
       <p>Dangerous bytes (escapes, cursor and screen control, overrides, invisibles,
         NUL) become inert <code>_</code> placeholders. Real color codes are kept so
         honest output still renders.</p></div>
-    <div class="step"><div class="num">02</div><h4>Surface</h4>
+    <div class="step"><div class="num">02</div><h3>Surface</h3>
       <p>Every anomaly is named: the codepoint by <code>[U+XXXX]</code>, the escape,
         the modeline, the file that hides it. Exit codes report it, so a script catches
         it too.</p></div>
-    <div class="step"><div class="num">03</div><h4>Fail closed</h4>
+    <div class="step"><div class="num">03</div><h3>Fail closed</h3>
       <p>When a file can't be decoded or shown safely, the tools stop and say so instead
         of passing raw bytes through to a terminal that would obey them.</p></div>
   </div>
@@ -548,7 +549,7 @@ Deploying to <span class="cp">[U+2067]</span>production<span class="cp">[U+2069]
   </figure>
 
   <div class="limits">
-    <h4>Honest about the limits</h4>
+    <h3>Honest about the limits</h3>
     <p>These make <b>display</b> safe, nothing more. They do not make
       copy-pasting untrusted commands safe, do not sanitize data used inside
       shell scripts, and their output must never be re-interpreted with
@@ -576,7 +577,7 @@ Deploying to <span class="cp">[U+2067]</span>production<span class="cp">[U+2069]
       a control-byte repaint, an SGR-hidden string, an <a href="#osc8">OSC 8</a> link whose text is not its
       target, and a <a href="#altscreen">?1049h</a> alternate-screen switch -- with honest Greek as the
       non-attack contrast.</p>
-    <div class="limits"><h4>Safe to run</h4>
+    <div class="limits"><h3>Safe to run</h3>
       <p>It is display-only: it sets the window title and switches to the
       alternate screen (both undone by <code>reset</code>), and copies, types and runs nothing. Its first bytes
       are a plaintext warning; it runs on the alternate screen so your scrollback is preserved. The dangerous
@@ -668,7 +669,7 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
 <section class="cat faq" id="faq"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#faq">FAQ</a></h2>
   <div class="qa" id="q-safe-to-open">
-    <h4><a class="qanchor" href="#q-safe-to-open">Is any of this dangerous to open?</a></h4>
+    <h3><a class="qanchor" href="#q-safe-to-open">Is any of this dangerous to open?</a></h3>
     <p>The demonstrations on this page are safe to read: they set a window title,
       erase a line, or carry a named codepoint, and nothing here runs a command. The
       <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
@@ -677,7 +678,7 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
       <code>cat</code> in a terminal you care about.</p>
   </div>
   <div class="qa" id="q-get-tools">
-    <h4><a class="qanchor" href="#q-get-tools">How do I get these tools?</a></h4>
+    <h3><a class="qanchor" href="#q-get-tools">How do I get these tools?</a></h3>
     <p>They are open-source Kicksecure utilities (<code>unicode-show</code>,
       <code>stcat</code>, <code>sanitize-string</code> and friends). They ship in
       <a href="https://www.kicksecure.com/">Kicksecure</a> and
@@ -688,20 +689,20 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
       <a href="https://www.kicksecure.com/wiki/Unicode-show">Kicksecure wiki</a>.</p>
   </div>
   <div class="qa" id="q-safe-run">
-    <h4><a class="qanchor" href="#q-safe-run">Are these safe to run on untrusted files?</a></h4>
+    <h3><a class="qanchor" href="#q-safe-run">Are these safe to run on untrusted files?</a></h3>
     <p>That is the point: they exist to <em>read</em> untrusted output safely.
       <code>unicode-show</code> and <code>text-safety-scan</code> only inspect and
       report; <code>stcat</code> and <code>sanitize-string</code> neutralize the
       dangerous characters instead of letting the terminal interpret them.</p>
   </div>
   <div class="qa" id="q-source">
-    <h4><a class="qanchor" href="#q-source">Is the source available?</a></h4>
+    <h3><a class="qanchor" href="#q-source">Is the source available?</a></h3>
     <p>Yes. This site is static HTML and CSS on
       <a href="https://github.com/output-lies/output-lies.github.io">GitHub</a>, and
       the tools it points to are open-source Kicksecure projects.</p>
   </div>
   <div class="qa" id="q-ai">
-    <h4><a class="qanchor" href="#q-ai">Was this built with AI?</a></h4>
+    <h3><a class="qanchor" href="#q-ai">Was this built with AI?</a></h3>
     <p>Yes: this page and its demonstrations are <a href="https://org-ai-assisted.github.io/">AI-assisted</a>. See also <a href="https://secure-terminal.github.io/human-review/">status of human review</a>.</p>
   </div>
 </div></section>
@@ -715,7 +716,7 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
     </div>
     <nav class="fcols">
       <div class="fcol">
-        <h4>Explore</h4>
+        <h3>Explore</h3>
         <a href="/">Home</a>
         <a href="/terminal/">Terminal</a>
         <a href="/git-diffs-lie/">Diffs</a>
@@ -724,19 +725,19 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
         <a href="/quiz/">Quiz</a>
       </div>
       <div class="fcol">
-        <h4>Source</h4>
+        <h3>Source</h3>
         <a href="https://github.com/output-lies/output-lies.github.io">output-lies.github.io</a>
         <a href="https://github.com/output-lies/git-diffs-lie">git-diffs-lie</a>
         <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a><a class="arch" href="https://web.archive.org/web/20260325044051/https://github.com/Kicksecure/helper-scripts" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
         <a href="https://github.com/Kicksecure/developer-meta-files">developer-meta-files</a><a class="arch" href="https://web.archive.org/web/20260219201723/https://github.com/Kicksecure/developer-meta-files" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
       </div>
       <div class="fcol">
-        <h4>Docs</h4>
+        <h3>Docs</h3>
         <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a><a class="arch" href="https://web.archive.org/web/20260311005257/https://www.kicksecure.com/wiki/Unicode-show" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
         <a href="https://www.kicksecure.com/wiki/Stdisplay">stdisplay</a><a class="arch" href="https://web.archive.org/web/20260706215954/https://www.kicksecure.com/wiki/Stdisplay" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
       </div>
       <div class="fcol">
-        <h4>Family</h4>
+        <h3>Family</h3>
         <a class="self" href="https://output-lies.github.io" aria-current="page">output lies</a>
         <a href="https://secure-terminal.github.io">secure-terminal</a>
         <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
@@ -745,15 +746,15 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
   </div>
   <div class="fshare">
     <span class="fshare-l">Share:</span>
-    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
-    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
-    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
-    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
-    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
-    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
-    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="x" href="#" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" href="#" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" href="#" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" href="#" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" href="#" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" href="#" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" href="#" rel="nofollow noopener">Hacker News</a>
     <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
-    <a class="sh" data-net="email">Email</a>
+    <a class="sh" data-net="email" href="#">Email</a>
     <button class="sh" data-net="copy" type="button">Copy link</button>
     <button class="sh" data-net="md" type="button">Copy as Markdown</button>
     <span class="sh-msg" aria-live="polite"></span>

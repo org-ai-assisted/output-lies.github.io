@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!--
   git-diffs-lie: educational corpus of adversarial git diffs.
   AI-Assisted. Source: https://github.com/output-lies/git-diffs-lie
@@ -43,7 +44,7 @@
       <a href="https://secure-terminal.github.io">secure-terminal</a>
       <a href="https://org-ai-assisted.github.io/automated-test-results/">Test results</a>
     </nav>
-    <label class="navscrim" for="navtoggle" aria-hidden="true"></label>
+    <label class="navscrim" for="navtoggle"></label>
   </div>
 </header>
 
@@ -531,13 +532,13 @@ b/data/config.env differ</span>
     terminal, it renders every change defensively. Every one of them does three
     things:</p>
   <div class="steps">
-    <div class="step"><div class="num">01</div><h4>Neutralize</h4>
+    <div class="step"><div class="num">01</div><h3>Neutralize</h3>
       <p>Dangerous bytes (overrides, invisibles, escapes, NUL) become inert
         placeholders. Real color codes are kept so honest diffs still render.</p></div>
-    <div class="step"><div class="num">02</div><h4>Surface</h4>
+    <div class="step"><div class="num">02</div><h3>Surface</h3>
       <p>Every anomaly is named: the codepoint, the mode change, the symlink
         target, the submodule move, the suspicious path or ref name.</p></div>
-    <div class="step"><div class="num">03</div><h4>Fail closed</h4>
+    <div class="step"><div class="num">03</div><h3>Fail closed</h3>
       <p>When it can't render or decide safely (undecodable bytes, a
         <code>.gitattributes</code> that can hide files) it stops instead of
         showing you something misleading.</p></div>
@@ -554,7 +555,7 @@ b/data/config.env differ</span>
   <h2 class="catname"><a class="h-anchor" href="#faq">FAQ</a></h2>
 
   <div class="qa" id="q-safe-to-open">
-    <h4><a class="qanchor" href="#q-safe-to-open">Is any of this dangerous to open?</a></h4>
+    <h3><a class="qanchor" href="#q-safe-to-open">Is any of this dangerous to open?</a></h3>
     <p>No. Every example is safe: RFC2606 <code>example.com</code> hosts,
       obviously-fake targets like <code>/nonexistent/DEMO-CREDENTIALS</code>, and
       published Trojan-Source characters. Nothing here executes when you read or
@@ -562,7 +563,7 @@ b/data/config.env differ</span>
   </div>
 
   <div class="qa" id="q-who-discovered">
-    <h4><a class="qanchor" href="#q-who-discovered">Who discovered these attacks?</a></h4>
+    <h3><a class="qanchor" href="#q-who-discovered">Who discovered these attacks?</a></h3>
     <p>The bidirectional-override and homoglyph class was formalized as
       <a href="https://trojansource.codes/">Trojan Source</a><a class="arch" href="https://web.archive.org/web/20260616040501/https://trojansource.codes/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> by
       <a href="https://www.cl.cam.ac.uk/~ndb40/">Nicholas Boucher</a><a class="arch" href="https://web.archive.org/web/20250816231622/https://www.cl.cam.ac.uk/~ndb40/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> and
@@ -587,7 +588,7 @@ b/data/config.env differ</span>
   </div>
 
   <div class="qa" id="q-git-bugs">
-    <h4><a class="qanchor" href="#q-git-bugs">Are these bugs in git?</a></h4>
+    <h3><a class="qanchor" href="#q-git-bugs">Are these bugs in git?</a></h3>
     <p>It's a mix. A few genuinely were git bugs: the crafted repositories
       that reach code execution on clone were real flaws in git itself, patched
       in security releases:
@@ -603,7 +604,7 @@ b/data/config.env differ</span>
   </div>
 
   <div class="qa" id="q-whose-fault">
-    <h4><a class="qanchor" href="#q-whose-fault">So whose fault is it?</a></h4>
+    <h3><a class="qanchor" href="#q-whose-fault">So whose fault is it?</a></h3>
     <p>There is no single culprit, which is exactly why it persists: a
       long-standing, ecosystem-wide problem grown over decades. Unicode, terminal
       emulators, editors, compilers and code-review frontends all turn untrusted
@@ -625,7 +626,7 @@ b/data/config.env differ</span>
   </div>
 
   <div class="qa" id="q-safe-tools">
-    <h4><a class="qanchor" href="#q-safe-tools">What are the "safe tools"?</a></h4>
+    <h3><a class="qanchor" href="#q-safe-tools">What are the "safe tools"?</a></h3>
     <p>External diff drivers from Kicksecure's
       <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a><a class="arch" href="https://web.archive.org/web/20260325044051/https://github.com/Kicksecure/helper-scripts" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>:
       <code>git-meld</code>, <code>git-kdiff3</code>, <code>git-diff-review</code>,
@@ -635,21 +636,21 @@ b/data/config.env differ</span>
   </div>
 
   <div class="qa" id="q-one-surprise">
-    <h4><a class="qanchor" href="#q-one-surprise">Why exactly one surprise per branch?</a></h4>
+    <h3><a class="qanchor" href="#q-one-surprise">Why exactly one surprise per branch?</a></h3>
     <p>So <code>git diff master..&lt;branch&gt;</code> isolates a single trick:
       easy to teach, and precise as a test fixture. <code>master</code> is a
       clean baseline; each branch adds exactly one thing.</p>
   </div>
 
   <div class="qa" id="q-own-tests">
-    <h4><a class="qanchor" href="#q-own-tests">Can I use it in my own tests?</a></h4>
+    <h3><a class="qanchor" href="#q-own-tests">Can I use it in my own tests?</a></h3>
     <p>Yes. <code>manifest.tsv</code> maps every branch to its expected behavior
       and drives a data-driven suite that asserts the review tool neutralizes,
       surfaces, or fails closed as documented.</p>
   </div>
 
   <div class="qa" id="q-built-with-ai">
-    <h4><a class="qanchor" href="#q-built-with-ai">Was this built with AI?</a></h4>
+    <h3><a class="qanchor" href="#q-built-with-ai">Was this built with AI?</a></h3>
     <p>Yes: the corpus, the tests, and this page are <a href="https://org-ai-assisted.github.io/">AI-assisted</a>. See also <a href="https://secure-terminal.github.io/human-review/">status of human review</a>.</p>
   </div>
 </div></section>
@@ -663,7 +664,7 @@ b/data/config.env differ</span>
     </div>
     <nav class="fcols">
       <div class="fcol">
-        <h4>Explore</h4>
+        <h3>Explore</h3>
         <a href="/">Home</a>
         <a href="/terminal/">Terminal</a>
         <a href="/git-diffs-lie/">Diffs</a>
@@ -672,19 +673,19 @@ b/data/config.env differ</span>
         <a href="/quiz/">Quiz</a>
       </div>
       <div class="fcol">
-        <h4>Source</h4>
+        <h3>Source</h3>
         <a href="https://github.com/output-lies/output-lies.github.io">output-lies.github.io</a>
         <a href="https://github.com/output-lies/git-diffs-lie">git-diffs-lie</a>
         <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a><a class="arch" href="https://web.archive.org/web/20260325044051/https://github.com/Kicksecure/helper-scripts" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
         <a href="https://github.com/Kicksecure/developer-meta-files">developer-meta-files</a><a class="arch" href="https://web.archive.org/web/20260219201723/https://github.com/Kicksecure/developer-meta-files" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
       </div>
       <div class="fcol">
-        <h4>Docs</h4>
+        <h3>Docs</h3>
         <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a><a class="arch" href="https://web.archive.org/web/20260311005257/https://www.kicksecure.com/wiki/Unicode-show" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
         <a href="https://www.kicksecure.com/wiki/Stdisplay">stdisplay</a><a class="arch" href="https://web.archive.org/web/20260706215954/https://www.kicksecure.com/wiki/Stdisplay" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
       </div>
       <div class="fcol">
-        <h4>Family</h4>
+        <h3>Family</h3>
         <a href="https://output-lies.github.io">output lies</a>
         <a href="https://secure-terminal.github.io">secure-terminal</a>
         <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
@@ -693,15 +694,15 @@ b/data/config.env differ</span>
   </div>
   <div class="fshare">
     <span class="fshare-l">Share:</span>
-    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
-    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
-    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
-    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
-    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
-    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
-    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="x" href="#" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" href="#" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" href="#" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" href="#" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" href="#" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" href="#" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" href="#" rel="nofollow noopener">Hacker News</a>
     <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
-    <a class="sh" data-net="email">Email</a>
+    <a class="sh" data-net="email" href="#">Email</a>
     <button class="sh" data-net="copy" type="button">Copy link</button>
     <button class="sh" data-net="md" type="button">Copy as Markdown</button>
     <span class="sh-msg" aria-live="polite"></span>
