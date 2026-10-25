@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <!--
   git-diffs-lie: educational corpus of adversarial git diffs.
   AI-Assisted. Source: https://github.com/output-lies/git-diffs-lie
@@ -35,7 +36,7 @@
     <a class="status" href="https://secure-terminal.github.io/human-review/" title="This page is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
-    <nav>
+    <nav aria-label="Primary">
       <a href="/terminal/">Terminal</a>
       <a href="/git-diffs-lie/" class="active">Diffs</a>
       <a href="/paste/">Paste</a>
@@ -116,11 +117,11 @@
     <p class="lead">A submodule pointer moves to a different, unfetched commit.
       The one-line <code>Subproject commit</code> diff is easy to wave through. A submodule is a bookmark to a specific commit in another repo; only the bookmark moved, but it can now point at booby-trapped code.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="del">-Subproject commit 1111111...</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="del">-Subproject commit 1111111...</span>
 <span class="add">+Subproject commit 2222222...</span>
 
 <span class="dim"># points at a commit you don't have</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term">Submodule 'vendor/sub':
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0">Submodule 'vendor/sub':
    1111111... -> 2222222...
 <span class="e">[ERROR]</span> submodule not an initialized git repo;
         cannot show diff. <span class="e">Failing closed.</span></pre></div>
@@ -130,8 +131,8 @@
       rather than pretend it reviewed it.</p>
     <p class="backdoor"><b>Backdoor path:</b> Bump the gitlink to a commit the reviewer can't see; on recursive clone or CI that submodule's code (and its hooks) run. The review only ever saw a 40-char hash.</p>
     <p class="wild"><b>Seen in the wild:</b> <a href="https://www.cve.org/CVERecord?id=CVE-2025-48384">CVE-2025-48384</a><a class="arch" href="https://web.archive.org/web/20260419223636/https://www.cve.org/CVERecord?id=CVE-2025-48384" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, a malicious-submodule RCE, is in <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">CISA's KEV catalog</a><a class="arch" href="https://web.archive.org/web/20260710210619/https://www.cisa.gov/known-exploited-vulnerabilities-catalog" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> (its list of actively-exploited flaws), and CrowdStrike <a href="https://www.crowdstrike.com/en-us/blog/crowdstrike-falcon-blocks-git-vulnerability-cve-2025-48384/">documented in-the-wild attacks</a><a class="arch" href="https://web.archive.org/web/20260311011047/https://www.crowdstrike.com/en-us/blog/crowdstrike-falcon-blocks-git-vulnerability-cve-2025-48384/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> that clone a booby-trapped repo against developers. Public reporting has not tied it to a specific named group. The related submodule-clone RCEs <a href="https://github.com/git/git/security/advisories/GHSA-8h77-4q3w-gfgv">CVE-2024-32002</a><a class="arch" href="https://web.archive.org/web/20260502173624/https://github.com/git/git/security/advisories/GHSA-8h77-4q3w-gfgv" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> and <a href="https://www.cve.org/CVERecord?id=CVE-2018-11235">CVE-2018-11235</a><a class="arch" href="https://web.archive.org/web/20260503145917/https://www.cve.org/CVERecord?id=CVE-2018-11235" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> remain proof-of-concept only.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/submodule-bump">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..type/submodule-bump</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..type/submodule-bump</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/submodule-bump">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..type/submodule-bump</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..type/submodule-bump</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="symlink">
@@ -142,10 +143,10 @@
       sensitive-looking path. Viewers that follow the link can render it as if
       nothing moved. A symlink is a shortcut: retargeting it silently redirects a read or write somewhere else.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> ls -l</div><pre class="term"><span class="dim">lrwxrwxrwx  link-notes</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> ls -l</div><pre class="term" tabindex="0"><span class="dim">lrwxrwxrwx  link-notes</span>
 
 <span class="dim"># target changed; the listing barely hints</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term">SYMLINK 'link-notes':
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0">SYMLINK 'link-notes':
    'notes.txt'
      -> '/nonexistent/<span class="big">DEMO-CREDENTIALS</span>'</pre></div>
     </div>
@@ -153,8 +154,8 @@
       by side: a retarget can't slip through as an unchanged link.</p>
     <p class="backdoor"><b>Backdoor path:</b> Repoint a tracked symlink at a path inside <code>.git</code> or at a sensitive file, so checkout writes (or the build's reads) land where the attacker chose.</p>
     <p class="wild"><b>Seen in the wild:</b> part of the in-the-wild <a href="https://www.crowdstrike.com/en-us/blog/crowdstrike-falcon-blocks-git-vulnerability-cve-2025-48384/">CVE-2025-48384 exploitation</a><a class="arch" href="https://web.archive.org/web/20260311011047/https://www.crowdstrike.com/en-us/blog/crowdstrike-falcon-blocks-git-vulnerability-cve-2025-48384/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>: a symlink pointed a checkout into <code>.git/modules</code> hooks. In <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">CISA's KEV catalog</a><a class="arch" href="https://web.archive.org/web/20260710210619/https://www.cisa.gov/known-exploited-vulnerabilities-catalog" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>; no specific group named in public reporting.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/symlink-retarget">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..type/symlink-retarget</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..type/symlink-retarget</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/symlink-retarget">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..type/symlink-retarget</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..type/symlink-retarget</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="bidi-filename">
@@ -165,10 +166,10 @@
       middle, so its real <code>.txt</code> tail renders flipped: the file
       looks like it ends in an image extension.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git status</div><pre class="term"><span class="add">  new file:   report&#x202e;gpj.txt&#x202c;</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git status</div><pre class="term" tabindex="0"><span class="add">  new file:   report&#x202e;gpj.txt&#x202c;</span>
 
 <span class="dim"># you read ".jpg"; git stored ".txt"</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> path 'report<span class="neut">_</span>gpj.txt' has
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> path 'report<span class="neut">_</span>gpj.txt' has
        suspicious bytes:
     <span class="cp">-> U+202E RIGHT-TO-LEFT OVERRIDE (Cf)</span></pre></div>
     </div>
@@ -176,8 +177,8 @@
       the hidden control character is reported and the real filename ending is shown.</p>
     <p class="backdoor"><b>Backdoor path:</b> Commit <code>setup&lt;RLO&gt;gpj.sh</code> that displays as <code>setup.jpg</code>; reviewers approve an 'image' while the build runs an executable script.</p>
     <p class="wild"><b>Seen in the wild:</b> right-to-left override filenames (<a href="https://attack.mitre.org/techniques/T1036/002/">MITRE ATT&amp;CK T1036.002</a><a class="arch" href="https://web.archive.org/web/20260628124137/https://attack.mitre.org/techniques/T1036/002/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>) used in real spearphishing by <a href="https://attack.mitre.org/groups/G0004/">Ke3chang</a><a class="arch" href="https://web.archive.org/web/20260528055511/https://attack.mitre.org/groups/G0004/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, <a href="https://attack.mitre.org/groups/G0098/">BlackTech</a><a class="arch" href="https://web.archive.org/web/20260118174228/https://attack.mitre.org/groups/G0098/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, <a href="https://attack.mitre.org/groups/G0060/">BRONZE BUTLER</a><a class="arch" href="https://web.archive.org/web/20260429051029/https://attack.mitre.org/groups/G0060/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> and <a href="https://attack.mitre.org/groups/G0137/">Ferocious Kitten</a><a class="arch" href="https://web.archive.org/web/20260217204040/https://attack.mitre.org/groups/G0137/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...path/bidi-filename">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..path/bidi-filename</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..path/bidi-filename</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...path/bidi-filename">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..path/bidi-filename</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..path/bidi-filename</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 </div></section>
 
@@ -193,12 +194,12 @@
     <p class="lead">A single invisible U+202E flips the reading order of a line.
       The logic you read runs backwards from the logic that executes. Like reading a line in a mirror: the letters you see spell something different from what runs.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="p">   const char *access_level(int admin) {</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="p">   const char *access_level(int admin) {</span>
 <span class="add">+     /* return &#x202e;nimda&#x202c; */ return admin ? "user" : "admin";</span>
 <span class="p">   }</span>
 
 <span class="dim"># reads one way, the bytes say another</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> src/hello.c suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> src/hello.c suspicious Unicode:
   hello.c:4: /* return <span class="cp">[U+202E]</span>nimda<span class="cp">[U+202C]</span> */ ...
     <span class="cp">-> U+202E RIGHT-TO-LEFT OVERRIDE (Cf)</span>
     <span class="cp">-> U+202C POP DIRECTIONAL FORMATTING (Cf)</span>
@@ -209,8 +210,8 @@
       it becomes an inert <code>_</code>, and the exact codepoint is named.</p>
     <p class="backdoor"><b>Backdoor path:</b> Hide a bidi override in a comment or string so the branch reviewers read as a safe check actually compiles as its opposite: e.g. an authorization test that silently always passes.</p>
     <p class="onrecord"><b>Proof of concept:</b> <a href="https://www.cve.org/CVERecord?id=CVE-2021-42574">CVE-2021-42574 (Trojan Source)</a><a class="arch" href="https://web.archive.org/web/20260303144948/https://www.cve.org/CVERecord?id=CVE-2021-42574" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>: research disclosure; no documented in-the-wild source-code use.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/bidi-trojan-source">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/bidi-trojan-source">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="homoglyph">
@@ -220,10 +221,10 @@
     <p class="lead">The <code>a</code> below is Cyrillic (U+0430), not Latin. It
       is a different identifier that renders pixel-for-pixel the same: the same trick as a lookalike domain like <code>paypaI.com</code> (capital i), identical to the eye, different underneath.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+   return v&#x430;lidate("role");</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+   return v&#x430;lidate("role");</span>
 
 <span class="dim"># looks like validate(); it isn't</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> src/hello.c suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> src/hello.c suspicious Unicode:
     <span class="cp">-> U+0430 CYRILLIC SMALL LETTER A (Ll)</span>
 <span class="dim">--- diff (neutralized) ---</span>
 <span class="add">+ return v<span class="neut">_</span>lidate("role");</span></pre></div>
@@ -232,8 +233,8 @@
       to different symbols. The tool marks the imposter character.</p>
     <p class="backdoor"><b>Backdoor path:</b> Name a function or variable with a look-alike letter so a call the reviewer reads as <code>validate()</code> actually invokes a different, attacker-defined symbol.</p>
     <p class="onrecord"><b>Proof of concept:</b> <a href="https://www.cve.org/CVERecord?id=CVE-2021-42694">CVE-2021-42694</a><a class="arch" href="https://web.archive.org/web/20260216114235/https://www.cve.org/CVERecord?id=CVE-2021-42694" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>: the homoglyph half of Trojan Source; disclosure only.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/homoglyph-identifier">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/homoglyph-identifier</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/homoglyph-identifier</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/homoglyph-identifier">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/homoglyph-identifier</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/homoglyph-identifier</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="ansi">
@@ -244,10 +245,10 @@
       the previous line. Your terminal shows <code>PASS</code> over the real
       <code>FAIL</code>.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat config.env</div><pre class="term"><span class="add" style="color:var(--tadd)">STATUS=PASS</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat config.env</div><pre class="term" tabindex="0"><span class="add" style="color:var(--tadd)">STATUS=PASS</span>
 
 <span class="dim"># the escape erased "STATUS=FAIL" a line above</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
     <span class="cp">-> U+001B ESC (Cc)</span>
 <span class="dim">--- diff (neutralized) ---</span>
 <span class="add">+ STATUS=FAIL<span class="neut">_</span>[1A<span class="neut">_</span>[2KSTATUS=PASS</span></pre></div>
@@ -256,8 +257,8 @@
       is right there in plain sight. (Real color codes are kept on purpose.)</p>
     <p class="backdoor"><b>Backdoor path:</b> Embed a cursor-up + erase-line escape in the diff or a build log so the reviewer's terminal repaints the malicious line as benign: the backdoor lands while the screen says it never existed.</p>
     <p class="onrecord"><b>Proof of concept:</b> <a href="https://www.cve.org/CVERecord?id=CVE-2025-55754">CVE-2025-55754</a><a class="arch" href="https://web.archive.org/web/20260610233655/https://www.cve.org/CVERecord?id=CVE-2025-55754" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>: disclosed in Apache Tomcat; the advisory reports no known attack vector.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/ansi-escape">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/ansi-escape">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/ansi-escape</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 </div></section>
 
@@ -276,10 +277,10 @@
     <p class="lead">A U+200B splits a token where you see none. <code>ADMIN&#x200b;TOKEN</code>
       and <code>ADMINTOKEN</code> look identical; only one matches: an invisible extra character wedged inside a word.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+ ADMIN&#x200b;TOKEN=granted</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+ ADMIN&#x200b;TOKEN=granted</span>
 
 <span class="dim"># one hidden character lives between N and T</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
     <span class="cp">-> U+200B ZERO WIDTH SPACE (Cf)</span>
 <span class="dim">--- diff (neutralized) ---</span>
 <span class="add">+ ADMIN<span class="neut">_</span>TOKEN=granted</span></pre></div>
@@ -288,8 +289,8 @@
       inert <code>_</code> exactly where the zero-width byte hid.</p>
     <p class="backdoor"><b>Backdoor path:</b> Split an identifier with a zero-width character so <code>admin_token</code> and <code>admin&lt;zwsp&gt;_token</code> look identical but bind to different values, routing a secret to the attacker's name.</p>
     <p class="onrecord"><b>Proof of concept:</b> the zero-width / invisible-character half of <a href="https://www.cve.org/CVERecord?id=CVE-2021-42574">Trojan Source (CVE-2021-42574)</a><a class="arch" href="https://web.archive.org/web/20260303144948/https://www.cve.org/CVERecord?id=CVE-2021-42574" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>; research disclosure.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/zero-width">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/zero-width</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/zero-width</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/zero-width">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/zero-width</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/zero-width</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="whitespace">
@@ -300,10 +301,10 @@
       Perfectly legitimate, endlessly confusing, and it must be surfaced, not
       treated as an error.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+ RETRY_LIMIT&#xa0;=&#xa0;0</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+ RETRY_LIMIT&#xa0;=&#xa0;0</span>
 
 <span class="dim"># those aren't ASCII spaces</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
     <span class="cp">-> U+00A0 NO-BREAK SPACE (Zs)</span>
     <span class="cp">-> U+00A0 NO-BREAK SPACE (Zs)</span>
 <span class="dim">--- diff (neutralized) ---</span>
@@ -313,8 +314,8 @@
       plainly rather than crashing the review: an ordinary-looking space that is really a Unicode character.</p>
     <p class="backdoor"><b>Backdoor path:</b> Swap an ASCII space for U+00A0 in a config key, so the parser reads a different key than the reviewer: a hardening flag that looks set is silently ignored.</p>
     <p class="knowntech"><b>Known technique:</b> a recognized visual-spoof class; no CVE or documented campaign covers Unicode-whitespace substitution in code review.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/unicode-whitespace">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/unicode-whitespace</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/unicode-whitespace</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/unicode-whitespace">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/unicode-whitespace</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/unicode-whitespace</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
 
@@ -325,18 +326,18 @@
     <p class="lead">One 6000-character line. Pagers truncate it or hang; the
       interesting part scrolls off the right edge into oblivion.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+ payload=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><span class="dim">... (6000)</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+ payload=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span><span class="dim">... (6000)</span>
 
 <span class="dim"># what's hiding past column 200?</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> data/config.env has a '6008'-char line;
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> data/config.env has a '6008'-char line;
         a viewer may truncate/hang.</pre></div>
     </div>
     <p class="catch"><b>The catch:</b> the length is called out up front, so a
       truncating viewer can't quietly swallow the tail.</p>
     <p class="backdoor"><b>Backdoor path:</b> Pad the line with thousands of characters so a payload sits far past where the pager truncates: off-screen, and unreviewed.</p>
     <p class="knowntech"><b>Known technique:</b> a well-understood pager/diff truncation evasion; no CVE or documented campaign.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/overlong-line">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/overlong-line</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/overlong-line</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/overlong-line">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/overlong-line</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/overlong-line</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <article class="issue" id="nul">
@@ -346,11 +347,11 @@
     <p class="lead">One <code>\0</code> makes git treat the file as binary. The
       real change is never rendered: git just says the files "differ".</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="dim">Binary files a/data/config.env and
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="dim">Binary files a/data/config.env and
 b/data/config.env differ</span>
 
 <span class="dim"># the actual change is invisible</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> data/config.env suspicious Unicode:
     <span class="cp">-> U+0000 NUL (Cc)</span>
 <span class="n">[NOTICE]</span> looks BINARY (NUL byte); shown as
          --stat only, not opened in the viewer.</pre></div>
@@ -359,8 +360,8 @@ b/data/config.env differ</span>
       "git treated this as binary" can't be mistaken for "nothing to see".</p>
     <p class="backdoor"><b>Backdoor path:</b> One NUL byte flips a source file to 'binary', so <code>git diff</code> shows only 'Binary files differ' and the added backdoor line is never rendered for review.</p>
     <p class="knowntech"><b>Known technique:</b> documented, intended git behavior (a NUL flips a file to binary); no CVE or documented campaign.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/nul-byte">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..content/nul-byte</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/nul-byte</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...content/nul-byte">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..content/nul-byte</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/nul-byte</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
   <div class="strip">
     <span class="lbl">More content cases</span>
@@ -385,11 +386,11 @@ b/data/config.env differ</span>
       <code>-diff</code>, and a plain <code>git diff</code> shows nothing for it.
       The edit ships unseen. Like a note on a package telling the inspector 'don't open this box', and the inspector obeys.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+ secret.txt -diff</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+ secret.txt -diff</span>
 <span class="dim">  (.gitattributes)</span>
 
 <span class="dim"># secret.txt WAS changed, but not shown</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="e">[ERROR]</span> .gitattributes changed: it can hide
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="e">[ERROR]</span> .gitattributes changed: it can hide
         OTHER files' contents from the diff.
         <span class="e">Failing closed.</span>
 <span class="n">[NOTICE]</span> set GIT_REVIEW_ALLOW_GITATTRIBUTES=1
@@ -400,8 +401,8 @@ b/data/config.env differ</span>
       non-ASCII directory that git quotes in its output.</p>
     <p class="backdoor"><b>Backdoor path:</b> Commit a <code>.gitattributes</code> marking <code>auth.c -diff</code>, then backdoor <code>auth.c</code>: the pull request shows no change for that file, so the edit ships invisibly.</p>
     <p class="knowntech"><b>Known technique:</b> named as an abuse vector in supply-chain research, but no CVE or confirmed in-the-wild campaign.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...path/gitattributes-hide-diff">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..path/gitattributes-hide-diff</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..path/gitattributes-hide-diff</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...path/gitattributes-hide-diff">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..path/gitattributes-hide-diff</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..path/gitattributes-hide-diff</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
   <div class="strip">
     <span class="lbl">More path cases</span>
@@ -426,10 +427,10 @@ b/data/config.env differ</span>
     <p class="lead">Flip a file to <code>+x</code> without touching a byte of
       content. A content diff is empty; the file is now runnable.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="dim">(no visible change)</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="dim">(no visible change)</span>
 
 <span class="dim"># same bytes, so a content diff is blank</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term">MODE CHANGE 'src/build.sh':
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0">MODE CHANGE 'src/build.sh':
      100644 -> 100755
 <span class="n">[NOTE]</span> 'src/build.sh' is now EXECUTABLE (+x).</pre></div>
     </div>
@@ -437,8 +438,8 @@ b/data/config.env differ</span>
       so "nothing changed" can't hide "it's executable now".</p>
     <p class="backdoor"><b>Backdoor path:</b> Set <code>+x</code> on a committed data or config file with no content change; a content-only diff shows nothing, but a build step or cron now executes it.</p>
     <p class="knowntech"><b>Known technique:</b> universally documented git behavior (a mode-only change); no CVE or documented campaign.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/mode-exec">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..type/mode-exec</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..type/mode-exec</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/mode-exec">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..type/mode-exec</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..type/mode-exec</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
 
@@ -451,10 +452,10 @@ b/data/config.env differ</span>
       <code>Subproject commit &lt;40 hex&gt;</code>, dressed up as a submodule
       pointer without being one.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term"><span class="add">+Subproject commit 3333333...</span>
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git diff</div><pre class="term" tabindex="0"><span class="add">+Subproject commit 3333333...</span>
 
 <span class="dim"># looks exactly like a submodule bump</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term"><span class="w">[WARN]</span> 'fake-sub' content mimics a gitlink
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git-diff-review</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> 'fake-sub' content mimics a gitlink
        but mode is not 160000; treating as a
        regular file. <span class="w">Possible obfuscation?</span></pre></div>
     </div>
@@ -462,8 +463,8 @@ b/data/config.env differ</span>
       the text, and flags the disguise.</p>
     <p class="backdoor"><b>Backdoor path:</b> A file whose content reads <code>Subproject commit &lt;hash&gt;</code> makes a reviewer believe a submodule pointer moved, masking what really changed, or disguising a payload as an inert gitlink line.</p>
     <p class="knowntech"><b>Known technique:</b> a plausible obfuscation; no CVE or documented use.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/gitlink-mimic">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git diff master..type/gitlink-mimic</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..type/gitlink-mimic</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> &middot; <a href="https://github.com/output-lies/git-diffs-lie/compare/master...type/gitlink-mimic">view the diff on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git diff master..type/gitlink-mimic</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; neutralized and flagged, never obeyed</span></div><div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..type/gitlink-mimic</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
   <div class="strip">
     <span class="lbl">More type cases</span>
@@ -488,11 +489,11 @@ b/data/config.env differ</span>
       next to <code>master</code> and is a homoglyph of it. git prints both
       verbatim.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git fetch</div><pre class="term"> * [new branch]  release&#x202e;gpj&#x202c;
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> git fetch</div><pre class="term" tabindex="0"> * [new branch]  release&#x202e;gpj&#x202c;
  * [new branch]  m&#x430;ster
 
 <span class="dim"># which one is your real master?</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> check-ref-names-for-unicode</div><pre class="term"><span class="w">[WARN]</span> ref 'release<span class="neut">_</span>gpj':
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> check-ref-names-for-unicode</div><pre class="term" tabindex="0"><span class="w">[WARN]</span> ref 'release<span class="neut">_</span>gpj':
     <span class="cp">-> U+202E RIGHT-TO-LEFT OVERRIDE (Cf)</span>
 <span class="w">[WARN]</span> ref 'm<span class="neut">_</span>ster':
     <span class="cp">-> U+0430 CYRILLIC SMALL LETTER A (Ll)</span></pre></div>
@@ -501,8 +502,8 @@ b/data/config.env differ</span>
       a fetched branch list is attacker-controlled text too.</p>
     <p class="backdoor"><b>Backdoor path:</b> Push a branch whose name is a homoglyph of <code>master</code>; a maintainer merges the look-alike and pulls attacker code, believing they merged the real default branch.</p>
     <p class="onrecord"><b>Proof of concept:</b> ref names extend the <a href="https://www.cve.org/CVERecord?id=CVE-2021-42574">Trojan Source</a><a class="arch" href="https://web.archive.org/web/20260303144948/https://www.cve.org/CVERecord?id=CVE-2021-42574" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> bidi (CVE-2021-42574) and <a href="https://www.cve.org/CVERecord?id=CVE-2021-42694">homoglyph (CVE-2021-42694)</a><a class="arch" href="https://web.archive.org/web/20260216114235/https://www.cve.org/CVERecord?id=CVE-2021-42694" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> classes to branch names; research disclosure, no documented in-the-wild use.</p>
-      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> <span class="rnote">&middot; the branch list itself is the attack: a bidi-reordered name and a homoglyph <code>master</code>.</span> &middot; <a href="https://github.com/output-lies/git-diffs-lie/branches/all">all branches &rarr;</a></div><div class="copybox"><code class="cmd">git for-each-ref --format='%(refname)' refs/heads</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; scan the ref names themselves; each homoglyph or bidi character is named</span></div><div class="copybox"><code class="cmd">check-ref-names-for-unicode</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="repro"><div class="reprohd"><a class="repro-try" href="/git-diffs-lie/#try">Reproduce</a> <span class="rnote">&middot; the branch list itself is the attack: a bidi-reordered name and a homoglyph <code>master</code>.</span> &middot; <a href="https://github.com/output-lies/git-diffs-lie/branches/all">all branches &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">git for-each-ref --format='%(refname)' refs/heads</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+      <div class="mitig"><div class="mitighd"><a class="mitig-try" href="/git-diffs-lie/#how">Mitigation</a> <span class="rnote">&middot; scan the ref names themselves; each homoglyph or bidi character is named</span></div><div class="copybox"><code class="cmd" tabindex="0">check-ref-names-for-unicode</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 </div></section>
 
@@ -512,12 +513,12 @@ b/data/config.env differ</span>
   <p class="lead">Same command, any branch. Run a naive viewer and a safe one on
     the exact same change and watch the difference.</p>
   <p class="cmdlabel">Clone the examples:</p>
-  <div class="copybox"><code class="cmd">git clone https://github.com/output-lies/git-diffs-lie</code><button class="copybtn" type="button" hidden>Copy</button></div>
-  <div class="copybox"><code class="cmd">cd git-diffs-lie</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">git clone https://github.com/output-lies/git-diffs-lie</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">cd git-diffs-lie</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="cmdlabel">What you see (raw bytes reach your terminal):</p>
-  <div class="copybox"><code class="cmd">git --no-pager diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">git --no-pager diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="cmdlabel">What's really happening (neutralized and flagged):</p>
-  <div class="copybox"><code class="cmd">git -c diff.external=git-diff-review diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">git -c diff.external=git-diff-review diff master..content/bidi-trojan-source</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="toolnote">Every branch doubles as a test fixture: <code>manifest.tsv</code> records what each
     one is and how a safe tool must handle it (neutralize, surface, or fail closed),
     and an automated suite checks them all.</p>
@@ -662,7 +663,7 @@ b/data/config.env differ</span>
       <span class="ftag"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></span>
       <p>Neutralize. Surface. Fail closed.</p>
     </div>
-    <nav class="fcols">
+    <nav class="fcols" aria-label="Footer">
       <div class="fcol">
         <h3>Explore</h3>
         <a href="/">Home</a>

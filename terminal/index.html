@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <!--
   cat lies too: safe terminal text tools showcase. AI-Assisted.
   Source: https://github.com/output-lies/output-lies.github.io
@@ -35,7 +36,7 @@
     <a class="status" href="https://secure-terminal.github.io/human-review/" title="This page is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
-    <nav>
+    <nav aria-label="Primary">
       <a href="/terminal/" class="active">Terminal</a>
       <a href="/git-diffs-lie/">Diffs</a>
       <a href="/paste/">Paste</a>
@@ -124,11 +125,11 @@
       mentions it. <code>unicode-show</code> flags every byte outside printable ASCII
       with its line number, <code>[U+XXXX]</code> marker, name and category.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term"><span class="p">$</span> cat withdraw.py
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term" tabindex="0"><span class="p">$</span> cat withdraw.py
 # Subtract funds from the account, then &#x2067;refund the user&#x2069;
 
 <span class="dim"># reads clean; an isolate char quietly reorders it</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> unicode-show</div><pre class="term"><span class="p">$</span> unicode-show withdraw.py
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> unicode-show</div><pre class="term" tabindex="0"><span class="p">$</span> unicode-show withdraw.py
 withdraw.py:1: # Subtract funds ... then <span class="cp">[U+2067]</span>refund the user
    <span class="cp">-> U+2067 RIGHT-TO-LEFT ISOLATE (Cf)</span>
 <span class="p">$</span> echo $?
@@ -148,8 +149,8 @@ withdraw.py:1: # Subtract funds ... then <span class="cp">[U+2067]</span>refund 
       from the escape-sequence cards below, same blind spot). The bidi and
       homoglyph half of this class was formalized as <a href="https://www.cve.org/CVERecord?id=CVE-2021-42574">Trojan Source (CVE-2021-42574)</a><a class="arch" href="https://web.archive.org/web/20260303144948/https://www.cve.org/CVERecord?id=CVE-2021-42574" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>
       and <a href="https://www.cve.org/CVERecord?id=CVE-2021-42694">CVE-2021-42694</a><a class="arch" href="https://web.archive.org/web/20260216114235/https://www.cve.org/CVERecord?id=CVE-2021-42694" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>.</p>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> renders it as innocent-looking text; the hidden characters stay invisible</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/trojan-source-bidi-2021/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; every hidden character named and colored right where it hides</span></div><div class="copybox"><code class="cmd">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> renders it as innocent-looking text; the hidden characters stay invisible</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/trojan-source-bidi-2021/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; every hidden character named and colored right where it hides</span></div><div class="copybox"><code class="cmd" tabindex="0">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <figure class="shot">
       <img src="/unicode-show-demo.webp" width="810" height="334" loading="lazy"
         alt="unicode-show run on a file named auth.py that reads like ordinary code. Each hidden character is flagged inline as a red bracketed codepoint such as [U+202E], and annotated on the next line in cyan with its codepoint, official name and category (RIGHT-TO-LEFT OVERRIDE, CYRILLIC SMALL LETTER A, ZERO WIDTH SPACE, NO-BREAK SPACE, SPACE), plus a note that the final newline is missing.">
@@ -171,11 +172,11 @@ withdraw.py:1: # Subtract funds ... then <span class="cp">[U+2067]</span>refund 
     <h3><a class="cardanchor" href="#escape-rce">Merely viewing a file can run commands</a></h3>
     <p class="lead">A terminal is not only a display. Some escape sequences ask it a <em>question</em> - report the window title, a DECRQSS status, the cursor position - and the terminal answers the only way it can: by writing the reply to its own input, exactly as if you had typed it. A hostile file can set that answer to a command and then ask for it back, so merely <code>cat</code>ing a poisoned log or README (or <code>tail -f</code>-ing a booby-trapped log, even one arriving over SSH) injects keystrokes, and once a newline rides along, a full command runs.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term"><span class="p">$</span> cat demo.log
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term" tabindex="0"><span class="p">$</span> cat demo.log
 deploy: OK
 
 <span class="dim"># the window title is hijacked and a FAILED line was erased before it printed</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term"><span class="p">$</span> stcat demo.log
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term" tabindex="0"><span class="p">$</span> stcat demo.log
 deploy: OK
 <span class="neut">_</span>]0;pwned<span class="neut">_</span><span class="neut">_</span>[2K<span class="neut">_</span>build: FAILED</pre></div>
     </div>
@@ -187,7 +188,7 @@ deploy: OK
     <p class="backdoor"><b>Backdoor path:</b> ship a poisoned log, README, or git repo; when a developer or admin views it in a vulnerable terminal, attacker bytes are echoed into the shell and run.</p>
     <p class="onrecord"><b>Proof of concept:</b> a well-documented class: iTerm2 <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-9535">CVE-2019-9535</a><a class="arch" href="https://web.archive.org/web/20260414161101/https://nvd.nist.gov/vuln/detail/CVE-2019-9535" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-45872">CVE-2022-45872</a><a class="arch" href="https://web.archive.org/web/20260102055000/https://nvd.nist.gov/vuln/detail/CVE-2022-45872" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> (RCE), xterm <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-27135">CVE-2021-27135</a><a class="arch" href="https://web.archive.org/web/20260312102057/https://nvd.nist.gov/vuln/detail/CVE-2021-27135" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, Windows Terminal <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-44702">CVE-2022-44702</a><a class="arch" href="https://web.archive.org/web/20251210235445/https://nvd.nist.gov/vuln/detail/CVE-2022-44702" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, and the <a href="https://dgl.cx/2023/09/ansi-terminal-security">ten CVEs</a><a class="arch" href="https://web.archive.org/web/20260617084902/https://dgl.cx/2023/09/ansi-terminal-security" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> David Leadbeater catalogued in 2023. And it keeps recurring: iTerm2 <a href="https://nvd.nist.gov/vuln/detail/CVE-2024-38396">CVE-2024-38396</a> and the brand-new terminal <a href="https://dgl.cx/2024/12/ghostty-terminal-title">Ghostty</a> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2024-56803" rel="noopener">CVE-2024-56803</a>) were both hit by the same window-title-into-keystrokes trick in 2024, with a public proof of concept that opens the calculator from a single <code>cat</code>. The origin paper is <a href="https://hdm.io/writing/termulation.txt">HD Moore's "Terminal Emulator Security Issues" (2003)</a><a class="arch" href="https://web.archive.org/web/20260617084903/https://hdm.io/writing/termulation.txt" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>; see also <a href="https://www.cyberark.com/resources/threat-research-blog/dont-trust-this-title-abusing-terminal-emulators-with-ansi-escape-characters">CyberArk</a><a class="arch" href="https://web.archive.org/web/20260511163824/https://www.cyberark.com/resources/threat-research-blog/dont-trust-this-title-abusing-terminal-emulators-with-ansi-escape-characters" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>. All responsibly disclosed; none observed in the wild.</p>
     <p class="toolnote"><b>Build a safe stand-in and watch it neutralized</b> (no real terminal is harmed, the payload only sets a title and erases a line):</p>
-    <pre class="term"><span class="dim"># write a "log" that hides a title-change and a line-erase redraw</span>
+    <pre class="term" tabindex="0"><span class="dim"># write a "log" that hides a title-change and a line-erase redraw</span>
 <span class="p">$</span> printf 'deploy: OK\n\033]0;pwned\007\033[2K\rbuild: FAILED\n' &gt; demo.log
 
 <span class="dim"># cat obeys the bytes: the window title is hijacked and FAILED is erased</span>
@@ -203,8 +204,8 @@ deploy: OK
 <span class="p">$</span> unicode-show demo.log
 demo.log:2: <span class="cp">[U+001B]</span>]0;pwned<span class="cp">[U+0007]</span>...
    <span class="cp">-&gt; U+001B ESCAPE (Cc), U+0007 BELL (Cc)</span></pre>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/title-report-echoback-2003" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/title-report-echoback-2003/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; every escape neutralized to <code>_</code>, nothing hidden or run</span></div><div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/title-report-echoback-2003" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/title-report-echoback-2003/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; every escape neutralized to <code>_</code>, nothing hidden or run</span></div><div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <figure class="shot">
       <img src="/escape-rce-demo.webp" width="790" height="277" loading="lazy"
         alt="A terminal where cat notice.txt prints only 'Update installed. System healthy.' while the file secretly carries an OSC terminal-control sequence. stcat reveals the hidden payload as _]0;attacker@evil:~# _ before the visible text, and unicode-show names the hidden bytes U+001B (ESC) and U+0007 (BEL).">
@@ -222,10 +223,10 @@ demo.log:2: <span class="cp">[U+001B]</span>]0;pwned<span class="cp">[U+0007]</s
       print a link that <em>reads</em> <code>example.com</code> but <em>points</em> at <code>example.org</code>.
       You see the label; the target hides in the escape.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you see</div><pre class="term"><span class="p">$</span> cat release-notes.txt
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you see</div><pre class="term" tabindex="0"><span class="p">$</span> cat release-notes.txt
 Get the installer: <span style="color:#6ea8fe;text-decoration:underline">example.com</span>
 <span class="dim"># an ordinary-looking, clickable link</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term"><span class="p">$</span> stcat release-notes.txt
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term" tabindex="0"><span class="p">$</span> stcat release-notes.txt
 Get the installer: <span class="neut">_</span>]8;;https://example.org<span class="neut">_</span>\example.com<span class="neut">_</span>]8;;<span class="neut">_</span>\
    <span class="cp">-&gt; label "example.com"  --  target https://example.org</span></pre></div>
     </div>
@@ -237,8 +238,8 @@ Get the installer: <span class="neut">_</span>]8;;https://example.org<span class
       <code>example.com</code> but targets an attacker site; the reader clicks the label they trust and lands on
       the payload, or a <code>ssh://</code>-style scheme smuggles arguments into the command the click runs.</p>
     <p class="onrecord"><b>Proof of concept:</b> OSC 8 hyperlink phishing was disclosed as <a href="https://nvd.nist.gov/vuln/detail/CVE-2023-46322" rel="noopener">CVE-2023-46322</a> (and related CVE-2023-46321 / CVE-2022-46663); see the hyperlink rows in the <a href="#classes">attack-class table</a>. No documented in-the-wild campaign.</p>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc8-hyperlink-phishing" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/osc8-hyperlink-phishing/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the OSC 8 escape neutralized to <code>_</code>, so the real target is in plain text</span></div><div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc8-hyperlink-phishing" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/osc8-hyperlink-phishing/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the OSC 8 escape neutralized to <code>_</code>, so the real target is in plain text</span></div><div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
   </article>
 
   <!-- ---------- logs as a surface ---------- -->
@@ -248,18 +249,18 @@ Get the installer: <span class="neut">_</span>]8;;https://example.org<span class
     <h3><a class="cardanchor" href="#log-injection">Logs can attack the person reading them</a></h3>
     <p class="lead">Escape sequences smuggled into a log line do nothing to the file, but when an admin views that log in an ANSI-capable console, they can rewrite what is shown, forge entries, or manipulate the clipboard to trick the admin into running a command. You <code>cat</code> and <code>tail</code> logs from places you do not control: CI output, container and <code>kubectl</code> logs, a remote server over SSH, a honeypot. A log is just a file an attacker can write into.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term"><span class="p">$</span> cat access.log
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term" tabindex="0"><span class="p">$</span> cat access.log
 INFO: system all-good!
 
 <span class="dim"># a \r returned the cursor and "all-good" repainted over the real ERROR line</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term"><span class="p">$</span> stcat access.log
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term" tabindex="0"><span class="p">$</span> stcat access.log
 ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre></div>
     </div>
     <p class="catch"><b>The catch:</b> the log file is honest; only the rendering lies. An attacker-controlled field (a username, a URL, a header) carries a carriage return that overwrites the real entry with a forged one. <code>stcat</code> neutralizes the CR to <code>_</code>, so the real <code>ERROR</code> is right there.</p>
     <p class="backdoor"><b>Backdoor path:</b> get attacker-controlled text into a log (via a crafted URL, a username, a header), then wait for someone to read the log in a terminal.</p>
     <p class="onrecord"><b>Proof of concept:</b> Apache Tomcat's <a href="https://nvd.nist.gov/vuln/detail/CVE-2025-55754">CVE-2025-55754</a><a class="arch" href="https://web.archive.org/web/20260611002953/https://nvd.nist.gov/vuln/detail/CVE-2025-55754" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> did not escape ANSI in log messages. Note the honesty gap these tools argue against: NVD scores it <b>9.6</b>, but <a href="https://tomcat.apache.org/security-9.html">Apache rates it Low</a><a class="arch" href="https://web.archive.org/web/20260630151002/https://tomcat.apache.org/security-9.html" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a> ("no attack vector was found"): theoretical, not demonstrated end to end. There is no ATT&amp;CK technique for this display-layer forgery; the nearest, <a href="https://attack.mitre.org/techniques/T1070/003/">T1070.003</a><a class="arch" href="https://web.archive.org/web/20260616003318/https://attack.mitre.org/techniques/T1070/003/" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>, is about deleting logs, not deceiving the reader of an intact one.</p>
     <p class="toolnote"><b>Reproduce the forgery</b> with a benign stand-in:</p>
-    <pre class="term"><span class="dim"># the field value hides a \r that returns the cursor to column 0</span>
+    <pre class="term" tabindex="0"><span class="dim"># the field value hides a \r that returns the cursor to column 0</span>
 <span class="p">$</span> printf 'ERROR: breach detected\rINFO: system all-good!\n' &gt;&gt; access.log
 
 <span class="dim"># cat renders the CR: "all-good" repaints over the real ERROR line</span>
@@ -269,8 +270,8 @@ INFO: system all-good!
 <span class="dim"># stcat neutralizes the CR to _, so the real ERROR is right there</span>
 <span class="p">$</span> stcat access.log
 ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the forged line replaces the real one</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/crafted-hostile-log" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/crafted-hostile-log/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the carriage return neutralized to <code>_</code>, so the real <code>ERROR</code> is right there</span></div><div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the forged line replaces the real one</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/crafted-hostile-log" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/crafted-hostile-log/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the carriage return neutralized to <code>_</code>, so the real <code>ERROR</code> is right there</span></div><div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">unicode-show payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <figure class="shot">
       <img src="/log-injection-demo.webp" width="930" height="277" loading="lazy"
         alt="A terminal where cat access.log prints a benign-looking line, 10.0.0.9 - GET /health 200 ok, while the log line hides an OSC 52 clipboard-write escape. stcat reveals the payload as _]52;c;ZWNobyBwd25lZAo=_ and unicode-show names the hidden U+001B (ESC) and U+0007 (BEL) bytes.">
@@ -289,12 +290,12 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       <code>modeline-show</code> (run on its own or via <code>text-safety-scan</code>)
       flags it.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term"><span class="p">$</span> cat changelog
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term" tabindex="0"><span class="p">$</span> cat changelog
 - fix typo in release notes
 # vim: set fdm=expr fde=system('...'):
 
 <span class="dim"># reads like a harmless editor hint at the end of the file</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> text-safety-scan</div><pre class="term"><span class="p">$</span> text-safety-scan changelog
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> text-safety-scan</div><pre class="term" tabindex="0"><span class="p">$</span> text-safety-scan changelog
 <span class="dim"># runs unicode-show AND modeline-show</span>
 <span class="w">[modeline]</span> changelog:2: Vim modeline found:
    # vim: set fdm=expr fde=system('...'):
@@ -314,8 +315,8 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
     <p class="onrecord"><b>Proof of concept:</b> opening a crafted file has meant code
       execution: Vim/Neovim modeline RCE <a href="https://www.cve.org/CVERecord?id=CVE-2019-12735">CVE-2019-12735</a><a class="arch" href="https://web.archive.org/web/20260224131015/https://www.cve.org/CVERecord?id=CVE-2019-12735" title="Archived copy (Wayback Machine)" aria-label="Archived copy"></a>.
       No documented in-the-wild campaign.</p>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; no stored fixture: a benign hand-run stand-in -- a harmless modeline, no exploit. Opening it in a misconfigured editor is what applies the embedded setting</span></div><div class="copybox"><code class="cmd">printf '- notes\n# vim: set ai:\n' &gt; changelog</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">vim changelog    # the editor reads and applies the embedded modeline</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; audit the file first -- the modeline is surfaced, never applied</span></div><div class="copybox"><code class="cmd">text-safety-scan changelog</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; no stored fixture: a benign hand-run stand-in -- a harmless modeline, no exploit. Opening it in a misconfigured editor is what applies the embedded setting</span></div><div class="copybox"><code class="cmd" tabindex="0">printf '- notes\n# vim: set ai:\n' &gt; changelog</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">vim changelog    # the editor reads and applies the embedded modeline</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; audit the file first -- the modeline is surfaced, never applied</span></div><div class="copybox"><code class="cmd" tabindex="0">text-safety-scan changelog</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <figure class="shot">
       <img src="/text-safety-scan-demo.webp" width="950" height="296" loading="lazy"
         alt="A terminal running text-safety-scan on ./repo/changelog. One pass fires both plugins: unicode-show names a hidden U+0430 Cyrillic character, and modeline-show warns that a Vim modeline was found, quoting the line. text-safety-scan then reports FAIL with two findings, and echo $? prints 1.">
@@ -343,7 +344,7 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       Play:</p>
     <div class="asplayer">
       <div class="tbar"><span class="dots"><i></i><i></i><i></i></span> <span id="as-cap">primary screen</span></div>
-      <pre class="term" id="as-screen" style="min-height:12.5em"><span class="p">$</span> cat deploy.log</pre>
+      <pre class="term" tabindex="0" id="as-screen" style="min-height:12.5em"><span class="p">$</span> cat deploy.log</pre>
     </div>
     <div class="ascontrols"><button class="btn ghost" id="as-play" type="button">Play</button>
       <span class="dim" id="as-state">a safe re-enactment -- no real terminal is touched</span></div>
@@ -357,8 +358,8 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       fake (an all-green build, a clean scan), then leaves -- your scrollback is restored untouched, so no trace
       of the forged view survives for you to scroll back and catch.</p>
     <p class="knowntech"><b>Known technique:</b> the alternate screen is a legitimate, universal terminal feature; painting a fake view then restoring is a recognized abuse with no specific CVE or documented campaign.</p>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/alt-screen-hijack" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/alt-screen-hijack/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the alt-screen switch neutralized to <code>_</code>, so nothing is hidden</span></div><div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the lie fires</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/alt-screen-hijack" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/alt-screen-hijack/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the alt-screen switch neutralized to <code>_</code>, so nothing is hidden</span></div><div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <script src="/terminal/playback.js"></script>
   </article>
 
@@ -371,11 +372,11 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       <code>cat</code> that means "hide the failure". <code>stcat</code> turns
       the ESC byte into an inert <code>_</code> and keeps only safe color codes.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term"><span class="p">$</span> cat build.log
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> cat</div><pre class="term" tabindex="0"><span class="p">$</span> cat build.log
 <span class="ok">[ ok ] all checks passed</span>
 
 <span class="dim"># an escape erased the FAILED line before it printed</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term"><span class="p">$</span> stcat build.log
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> stcat</div><pre class="term" tabindex="0"><span class="p">$</span> stcat build.log
 <span class="e">FAILED: auth bypass</span><span class="neut">_</span>[2K<span class="neut">_</span><span class="ok">[ ok ] all checks passed</span></pre></div>
     </div>
     <p class="catch"><b>The catch:</b> the erase (<code>ESC[2K</code>) and the
@@ -389,8 +390,8 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       its own failure line, so a reader watching output scroll past sees only a
       green pass where a red <code>FAILED</code> really printed.</p>
     <p class="knowntech"><b>Known technique:</b> cursor addressing and erase-in-line are standard terminal control; using them to overwrite a failure is a recognized abuse with no specific CVE or documented campaign.</p>
-    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the failure is erased</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/cursor-addressing-spoof" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">base64 -d poc/cursor-addressing-spoof/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
-    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the erase and carriage return neutralized to <code>_</code>, surfacing the hidden <code>FAILED</code></span></div><div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="repro"><div class="reprohd"><a class="repro-try" href="#try">Reproduce</a> <span class="rnote">&middot; sandbox VM only -- bare <code>cat</code> obeys the bytes, so the failure is erased</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/cursor-addressing-spoof" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/cursor-addressing-spoof/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div><div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+    <div class="mitig"><div class="mitighd"><a class="mitig-try" href="#secure-terminal">Mitigation</a> <span class="rnote">&middot; the erase and carriage return neutralized to <code>_</code>, surfacing the hidden <code>FAILED</code></span></div><div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
     <figure class="shot">
       <img src="/stcat-demo.webp" width="930" height="277" loading="lazy"
         alt="A terminal comparing cat and stcat on build.log. cat shows three green [ ok ] lines including all checks passed, hiding the failure. stcat reveals the red FAILED: auth bypass in login() line, with the erase and carriage return neutralized to _[2K_ and the green [ ok ] all checks passed kept.">
@@ -443,11 +444,11 @@ ERROR: breach detected<span class="neut">_</span>INFO: system all-good!</pre>
       clamped legible, cursor and screen control are neutralized, and every non-ASCII
       byte is named <code>&lt;U+XXXX&gt;</code> or shown as an inert risk-tinted box.</p>
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> any terminal</div><pre class="term"><span class="p">$</span> cat deploy.log
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> any terminal</div><pre class="term" tabindex="0"><span class="p">$</span> cat deploy.log
 Deploying to &#x2067;production&#x2069;... done
 
 <span class="dim"># reads clean; an isolate reordered it and an OSC forged the title</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> secure-terminal</div><pre class="term"><span class="p">$</span> cat deploy.log
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> secure-terminal</div><pre class="term" tabindex="0"><span class="p">$</span> cat deploy.log
 Deploying to <span class="cp">[U+2067]</span>production<span class="cp">[U+2069]</span>... done
 <span class="w">! blocked OSC title escape</span></pre></div>
     </div>
@@ -585,11 +586,11 @@ Deploying to <span class="cp">[U+2067]</span>production<span class="cp">[U+2069]
     <p class="toolnote"><a class="dl" href="https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt" rel="noopener">Get the board (2.4 KB .txt)</a>
       from the <a href="https://github.com/secure-terminal/terminal-safe-corpus" rel="noopener">terminal-safe-corpus</a>
       -- then read it SAFELY before you cat it, or paste it into the <a href="/analyze/">x-ray tool</a>.</p>
-    <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt
+    <div class="copybox"><code class="cmd" tabindex="0">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt
 unicode-show terminal-attack-demo-WARNING-display-only-safe.txt   # names every hidden byte</code><button class="copybtn" type="button" hidden>Copy</button></div>
 
     <div class="panes">
-      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what cat shows</div><pre class="term"><span class="p">$</span> cat terminal-attack-demo...txt
+      <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what cat shows</div><pre class="term" tabindex="0"><span class="p">$</span> cat terminal-attack-demo...txt
 ex&#x430;mple.com
 go&#x3BF;gle.com
 rnicrosoft.com
@@ -600,7 +601,7 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
 &#xFF21;&#xFF22;&#xFF23;
 &#x395;&#x3BB;&#x3BB;&#x3B7;&#x3BD;&#x3B9;&#x3BA;&#x3AC;
 <span class="dim"># reads clean: every trick invisible or disguised</span></pre></div>
-      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term" id="board-xray"><span class="dim"># each hidden/disguised codepoint, named (the same analyzer the x-ray tool runs):</span>
+      <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what is really there</div><pre class="term" tabindex="0" id="board-xray"><span class="dim"># each hidden/disguised codepoint, named (the same analyzer the x-ray tool runs):</span>
 <span class="dim">Homoglyph (Cyrillic)  </span>ex<span class="cp">[U+0430]</span>mple.com
 <span class="dim">Homoglyph (Greek)     </span>go<span class="cp">[U+03BF]</span>gle.com
 <span class="dim">ASCII look-alike      </span>rnicrosoft.com  <span class="dim">(pure ASCII -- rn reads as m)</span>
@@ -637,13 +638,13 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
     the <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>.
     View them with the safe tools, never bare <code>cat</code>, and in a sandbox VM.</p>
   <p class="cmdlabel">Clone the proofs:</p>
-  <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
-  <div class="copybox"><code class="cmd">cd terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">cd terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="cmdlabel">Reproduce (sandbox VM -- bare <code>cat</code> obeys the bytes):</p>
-  <div class="copybox"><code class="cmd">base64 -d poc/osc8-hyperlink-phishing/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
-  <div class="copybox"><code class="cmd">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">base64 -d poc/osc8-hyperlink-phishing/payload.b64 &gt; payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">cat payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="cmdlabel">Mitigation (neutralized, never obeyed):</p>
-  <div class="copybox"><code class="cmd">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
+  <div class="copybox"><code class="cmd" tabindex="0">stcat payload</code><button class="copybtn" type="button" hidden>Copy</button></div>
   <p class="toolnote">No terminal at all? Paste any of it into the browser
     <a href="/analyze/">x-ray tool</a>, or watch a live re-enactment on the
     <a href="/paste/">paste page</a> -- both name every hidden byte without touching a
@@ -714,7 +715,7 @@ h&#x301;&#x300;&#x323;&#x308;e&#x301;&#x300;&#x323;&#x308;llo
       <span class="ftag"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></span>
       <p>Neutralize. Surface. Fail closed.</p>
     </div>
-    <nav class="fcols">
+    <nav class="fcols" aria-label="Footer">
       <div class="fcol">
         <h3>Explore</h3>
         <a href="/">Home</a>

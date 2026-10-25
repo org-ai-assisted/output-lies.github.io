@@ -2,7 +2,7 @@
    Warm paper, sans "what you read" vs mono "what's really there", one anomaly
    accent (magenta) marking hidden codepoints. No external fonts/assets. AI-Assisted. */
 :root{
-  --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#6b6f76; --line:#e4e2da;
+  --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#61656d; --line:#e4e2da;
   --accent:#c21a74; --safe:#1a7a49;
   --tbg:#14161b; --tfg:#cfd3da; --tdim:#727a8a; --twarn:#e0af68;
   --terr:#f7768e; --tnote:#7dcfff; --tadd:#9ece6a; --tdel:#f7768e; --tneut:#c0caf5;
@@ -129,7 +129,7 @@ section.cat{padding:clamp(26px,6vw,52px) 0 8px}
 .pane.real .tbar .dots i:first-child{background:var(--accent)}
 .term{margin:0;background:var(--tbg);color:var(--tfg);font:.8rem/1.6 var(--mono);
   padding:14px;overflow-x:auto;white-space:pre;min-height:150px}
-.term .p{color:#5f6b7e}
+.term .p{color:#758194}
 .term .add{color:var(--tadd)} .term .del{color:var(--tdel)} .term .dim{color:var(--tdim)}
 .term .w{color:var(--twarn)} .term .e{color:var(--terr);font-weight:600} .term .n{color:var(--tnote)}
 .term .cp{color:#9aa4bf}

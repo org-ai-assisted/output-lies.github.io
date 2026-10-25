@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <!--
   analyze: paste-and-reveal client-side text x-ray. AI-Assisted.
   Source: https://github.com/output-lies/output-lies.github.io
@@ -95,7 +96,7 @@
     <a class="status" href="https://secure-terminal.github.io/human-review/" title="This page is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
-    <nav>
+    <nav aria-label="Primary">
       <a href="/terminal/">Terminal</a>
       <a href="/git-diffs-lie/">Diffs</a>
       <a href="/paste/">Paste</a>
@@ -215,7 +216,7 @@
         <div class="pane see"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what you pasted</div>
           <div class="xray" id="sb-raw" style="border-radius:0;border:0;min-height:96px"></div></div>
         <div class="pane real"><div class="tbar"><span class="dots"><i></i><i></i><i></i></span> what a safe terminal keeps</div>
-          <pre class="term" id="sb-safe" style="min-height:96px"></pre></div>
+          <pre class="term" tabindex="0" id="sb-safe" style="min-height:96px"></pre></div>
       </div>
       <p class="tallies" id="sb-tallies"></p>
       <div class="axtra">
@@ -315,7 +316,7 @@
       <span class="ftag"><img class="brandmark" src="/logo-wide.webp" width="564" height="77" alt="output lies"></span>
       <p>Neutralize. Surface. Fail closed.</p>
     </div>
-    <nav class="fcols">
+    <nav class="fcols" aria-label="Footer">
       <div class="fcol">
         <h3>Explore</h3>
         <a href="/">Home</a>
