@@ -129,7 +129,7 @@ section.cat{padding:clamp(26px,6vw,52px) 0 8px}
 .pane.real .tbar .dots i:first-child{background:var(--accent)}
 .term{margin:0;background:var(--tbg);color:var(--tfg);font:.8rem/1.6 var(--mono);
   padding:14px;overflow-x:auto;white-space:pre;min-height:150px}
-.term .p{color:#758194}
+.term .p{color:#788498}
 .term .add{color:var(--tadd)} .term .del{color:var(--tdel)} .term .dim{color:var(--tdim)}
 .term .w{color:var(--twarn)} .term .e{color:var(--terr);font-weight:600} .term .n{color:var(--tnote)}
 .term .cp{color:#9aa4bf}
