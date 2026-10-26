@@ -1,0 +1,151 @@
+# AI-Assisted.
+# Modern GitHub Pages deploy: publish this site via GitHub Actions (build_type
+# "workflow"), gated on the dist-ai website-tests lanes that CAN run on a stock
+# runner -- the static consistency lane plus the Playwright mobile + width lanes.
+# A red gate blocks the publish (the deploy job `needs:` all three), which the old
+# legacy branch-build could not do: it served whatever landed on master regardless
+# of CI.
+#
+# Owner-gated to the site's OWN org (where <owner>.github.io actually serves from),
+# so the SAME file is inert in the org-ai-assisted CI mirror -- the mirror runs the
+# gate for visibility via its own CI-var-gated workflows (web-consistency-tests /
+# website-mobile / website-width) and never deploys. The Qubes-sandbox lanes
+# (lint/vnu/lighthouse/axe) cannot run on a GitHub runner and stay enforced on the
+# operator's local pre-push path.
+name: pages-deploy
+
+"on":
+  # Pages serves master; a push to it IS the deploy trigger.
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time; never cancel a publish mid-flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  static:
+    # Owner-gated: runs in the owning org (output-lies), where the deploy happens;
+    # inert in the org-ai-assisted mirror (its own web-consistency-tests covers it).
+    if: github.repository_owner == 'output-lies'
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container: debian:trixie-slim
+    steps:
+      - name: Install tools
+        run: apt-get update && apt-get install --yes --no-install-recommends git python3 python3-pil python3-defusedxml ca-certificates
+
+      - name: Check out output-lies.github.io
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          path: output-lies
+          # The next step runs dist-ai's code in this workspace; do not leave this
+          # repo's GITHUB_TOKEN in .git/config for foreign code to read.
+          persist-credentials: false
+
+      - name: Check out dist-ai (static checks)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: org-ai-assisted/dist-ai
+          path: dist-ai
+          persist-credentials: false
+
+      - name: Run static website-consistency checks
+        run: ./dist-ai/ci/website-static-check.sh "${GITHUB_WORKSPACE}/output-lies"
+
+  mobile:
+    if: github.repository_owner == 'output-lies'
+    timeout-minutes: 20
+    # ubuntu, not the trixie-slim container: 'playwright install --with-deps
+    # chromium' pulls the browser's OS packages, simplest on the hosted image.
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out output-lies.github.io
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          path: output-lies
+          persist-credentials: false
+
+      - name: Check out dist-ai (mobile guard + check_mobile.py)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: org-ai-assisted/dist-ai
+          path: dist-ai
+          persist-credentials: false
+
+      - name: Mobile-overflow guard (mandatory)
+        run: ./dist-ai/ci/website-mobile-check.sh "${GITHUB_WORKSPACE}/output-lies"
+
+  width:
+    if: github.repository_owner == 'output-lies'
+    timeout-minutes: 20
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out output-lies.github.io
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          path: output-lies
+          persist-credentials: false
+
+      - name: Check out dist-ai (width guard + check_width.py)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: org-ai-assisted/dist-ai
+          path: dist-ai
+          persist-credentials: false
+
+      - name: Width-utilization guard (mandatory)
+        run: ./dist-ai/ci/website-width-check.sh "${GITHUB_WORKSPACE}/output-lies"
+
+  deploy:
+    # Publish only after every gate is green (a skipped/failed gate skips deploy),
+    # only from the owning org's master, never from a PR or the mirror.
+    needs: [static, mobile, width]
+    if: github.repository_owner == 'output-lies' && github.ref == 'refs/heads/master'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    permissions:
+      # Job-level permissions REPLACE the top-level block, so contents:read must
+      # be restated here or actions/checkout in this job loses repo read access.
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Check out output-lies.github.io
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Stage tracked tree (no .git)
+        # Serve the committed tree exactly as the legacy branch build did, minus the
+        # repo metadata: `git archive HEAD` emits only tracked files, so .git never
+        # reaches the artifact (and thus never the public site).
+        run: |
+          mkdir -p "${RUNNER_TEMP}/site"
+          git archive HEAD | tar -x -C "${RUNNER_TEMP}/site"
+
+      - name: Configure Pages
+        # Pages source is switched to GitHub Actions ONCE, out of band (the Pages
+        # API, build_type=workflow) as the one-time legacy->modern cutover;
+        # configure-pages then just reads it. enablement is deliberately NOT used:
+        # it cannot convert an already-existing legacy "Deploy from a branch" site,
+        # and the default token cannot create one -- relying on it would leave the
+        # branch build live and bypass this gate.
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b  # v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa  # v3
+        with:
+          path: ${{ runner.temp }}/site
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e  # v4

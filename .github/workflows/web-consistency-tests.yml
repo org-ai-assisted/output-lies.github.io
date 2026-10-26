@@ -1,34 +1,27 @@
 # AI-Assisted.
-# Runs the dist-ai website-tests suite against this site: every internal link
-# resolves, the footer carries the uniform family links, prose capitalizes
-# "Open Source"/"Free Software", and the review-status banner never claims a
-# green "working" state. The suite lives in org-ai-assisted/dist-ai (too
-# high-volume for human review); here we check out both repos as siblings and
-# point OUTPUT_LIES_REPO at this checkout. debian:trixie-slim matches the dist-ai
-# CI runtime.
+# Runs the dist-ai STATIC website-consistency lane against this site: every
+# internal link resolves, the footer carries the uniform family links, prose
+# capitalizes "Open Source"/"Free Software", the review-status banner never claims
+# a green "working" state, and first-party SVGs carry no active content. The checks
+# live in org-ai-assisted/dist-ai (too high-volume for human review); here we check
+# out both repos as siblings and point the static-check wrapper at this checkout.
+# debian:trixie-slim matches the dist-ai CI runtime.
+#
+# STATIC lane only: the full website-tests wrapper also drives the Playwright
+# browser lanes (their own workflows: website-mobile / website-width) and the
+# Qubes-sandbox lanes (lint/vnu/lighthouse/axe), neither of which a GitHub runner
+# has -- so it would exit 78 (env-unmet) here and cannot gate CI.
 name: web-consistency-tests
 
 on:
   ## Pages serves this branch directly, so a push IS a deploy: it has to be
   ## checked on push, not only on PRs, which the site is not developed through.
   push:
-    ## CI runs only where we enabled it. Unset variable -> the job is
-    ## skipped, no runner is allocated, and the run stays green: upstream
-    ## and forks are never handed a red X for a lane they did not opt into.
-    ## A fork that WANTS our CI sets the same variable in its own repo.
-    if: vars.CI_ENABLED_ORG_AI_ASSISTED == 'true'
-    timeout-minutes: 15
     paths:
       - '**/*.html'
       - 'style.css'
       - '.github/workflows/web-consistency-tests.yml'
   pull_request:
-    ## CI runs only where we enabled it. Unset variable -> the job is
-    ## skipped, no runner is allocated, and the run stays green: upstream
-    ## and forks are never handed a red X for a lane they did not opt into.
-    ## A fork that WANTS our CI sets the same variable in its own repo.
-    if: vars.CI_ENABLED_ORG_AI_ASSISTED == 'true'
-    timeout-minutes: 15
     paths:
       - '**/*.html'
       - 'style.css'
@@ -54,7 +47,7 @@ jobs:
     container: debian:trixie-slim
     steps:
       - name: Install tools
-        run: apt-get update && apt-get install --yes --no-install-recommends git python3 python3-pil ca-certificates
+        run: apt-get update && apt-get install --yes --no-install-recommends git python3 python3-pil python3-defusedxml ca-certificates
 
       - name: Check out output-lies.github.io
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -72,5 +65,5 @@ jobs:
           path: dist-ai
           persist-credentials: false
 
-      - name: Run website-tests
-        run: OUTPUT_LIES_REPO="${GITHUB_WORKSPACE}/output-lies" bash dist-ai/usr/bin/website-tests
+      - name: Run static website-consistency checks
+        run: ./dist-ai/ci/website-static-check.sh "${GITHUB_WORKSPACE}/output-lies"

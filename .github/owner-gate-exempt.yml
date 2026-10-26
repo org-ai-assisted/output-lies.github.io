@@ -1,0 +1,12 @@
+# AI-Assisted.
+# pages.yml is owner-gated (github.repository_owner == 'output-lies'), NOT gated on
+# the org-ai-assisted CI var: that var is absent in the output-lies org where the
+# site actually deploys, so the CI-var gate would skip every job there and defeat
+# the Actions deploy. The owner-gate gives the same fork/upstream protection (a
+# foreign owner skips the jobs). The CI mirror runs the consistency gate via its
+# own CI-var-gated workflows.
+owner-gate-exempt:
+  .github/workflows/pages.yml:static: "Owner-gated for the output-lies Pages deploy; CI var is absent in the deploy org and would disable the deploy."
+  .github/workflows/pages.yml:mobile: "Owner-gated for the output-lies Pages deploy; CI var is absent in the deploy org and would disable the deploy."
+  .github/workflows/pages.yml:width: "Owner-gated for the output-lies Pages deploy; CI var is absent in the deploy org and would disable the deploy."
+  .github/workflows/pages.yml:deploy: "Owner-gated for the output-lies Pages deploy; CI var is absent in the deploy org and would disable the deploy."
