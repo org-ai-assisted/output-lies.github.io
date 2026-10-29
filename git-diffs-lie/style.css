@@ -2,7 +2,7 @@
 :root{
     --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#61656d; --line:#e4e2da;
     --accent:#c21a74; --safe:#1a7a49;
-    --tbg:#14161b; --tfg:#cfd3da; --tdim:#727a8a; --twarn:#e0af68;
+    --tbg:#14161b; --tfg:#cfd3da; --tdim:#808795; --twarn:#e0af68;
     --terr:#f7768e; --tnote:#7dcfff; --tadd:#9ece6a; --tdel:#f7768e; --tneut:#c0caf5;
     --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
